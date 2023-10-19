@@ -1,24 +1,19 @@
-<!-- <script>
+<script>
 	import logo from '$lib/images/svelte-logo.svg';
 </script>
 
-<nav
-	id="sidenav-8"
-	class="absolute left-0 top-0 z-[1035] h-full w-60 -translate-x-full overflow-hidden bg-white shadow-[0_4px_12px_0_rgba(0,0,0,0.07),_0_2px_4px_rgba(0,0,0,0.05)] data-[te-sidenav-hidden='false']:translate-x-0 dark:bg-zinc-800"
-	data-te-sidenav-init
-	data-te-sidenav-hidden="false"
-	data-te-sidenav-position="absolute"
-	data-te-sidenav-accordion="true"
->
-	<a
-		class="mb-3 flex items-center justify-center border-b-2 border-solid border-text py-6 outline-none"
-		href="/"
-		data-te-ripple-init
-		data-te-ripple-color="primary"
-	>
-		<img id="te-logo" class="mr-2 w-6" src={logo} alt="Registry office" draggable="false" />
-		<span class="text-text hover:text-text-hover">Reggistry Office</span>
-	</a>
+<div class="SideBar w-60 h-screen">
+	<div class="logo py-1">
+		<a
+			class="flex items-center justify-center border-b-2 border-solid border-text py-6 outline-none"
+			href="/"
+			data-te-ripple-init
+			data-te-ripple-color="primary"
+		>
+			<img id="te-logo" class="mr-2 w-6" src={logo} alt="Registry office" draggable="false" />
+			<span class="text-text hover:text-text-hover">Reggistry Office</span>
+		</a>
+	</div>
 	<ul class="relative m-0 list-none px-[0.2rem] pb-12" data-te-sidenav-menu-ref>
 		<li class="relative">
 			<a
@@ -218,4 +213,10 @@
 			</a>
 		</li>
 	</ul>
-</nav> -->
+</div>
+
+<style>
+	.SideBar {
+		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+	}
+</style>
