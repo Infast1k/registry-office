@@ -1,5 +1,32 @@
 <script>
+	import { goto } from '$app/navigation';
+	import { check_email, check_password } from '$lib/scripts/form-validate.js';
+
+	let email = '';
+	let password = '';
+
+	let invalid_email = false;
+	let invalid_password = false;
+
 	let show_password = false;
+
+	function validate() {
+		var valid_email = check_email(email);
+		var valid_password = check_password(password);
+
+		if (valid_email && valid_password) {
+			// Функция авторизации
+			// Обработка ответа с сервера
+			// Сохранение токена в store
+			goto('/profile');
+			return;
+		}
+
+		email = '';
+		password = '';
+		invalid_email = true;
+		invalid_password = true;
+	}
 </script>
 
 <main>
@@ -11,36 +38,63 @@
 				</div>
 				<form action="#">
 					<div class="input-field">
-						<input type="text" placeholder="Введите почту" required />
+						<input
+							type="text"
+							class={invalid_email ? 'invalid' : ''}
+							placeholder={invalid_email ? 'Некорректная почта' : 'Введите почту'}
+							bind:value={email}
+							required
+						/>
 						<i class="uil uil-envelope icon" />
 					</div>
 					<div class="input-field">
-						<input
-							type={show_password ? 'text' : 'password'}
-							placeholder="Введите пароль"
-							required
-						/>
-						<i class="uil uil-lock icon" />
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<!-- svelte-ignore a11y-no-static-element-interactions -->
-						<i
-							class="uil uil-eye-slash showHidePw"
-							on:click={() => {
-								show_password = !show_password;
-							}}
-						/>
-					</div>
-					<div class="checkbox-text">
-						<a href="#!" class="text">Забыли пароль?</a>
+						{#if show_password}
+							<input
+								type="text"
+								placeholder={invalid_password ? 'Некорректный пароль' : 'Введите пароль'}
+								class={invalid_password ? 'invalid' : ''}
+								bind:value={password}
+								required
+							/>
+							<i class="uil uil-lock icon" />
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<i
+								class="uil uil-eye-slash showHidePw"
+								on:click={() => {
+									show_password = !show_password;
+								}}
+							/>
+						{:else}
+							<input
+								type="password"
+								placeholder={invalid_password ? 'Некорректный пароль' : 'Введите пароль'}
+								class={invalid_password ? 'invalid' : ''}
+								bind:value={password}
+								required
+							/>
+							<i class="uil uil-lock icon" />
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<i
+								class="uil uil-eye-slash showHidePw"
+								on:click={() => {
+									show_password = !show_password;
+								}}
+							/>
+						{/if}
 					</div>
 					<div class="input-field button">
-						<input type="button" value="Войти" />
+						<input type="button" value="Войти" on:click={validate} />
 					</div>
 				</form>
 				<div class="login-signup">
 					<span class="text"
 						>Нет аккаунта?
 						<a href="/register" class="text signup-text">Зарегистрироваться</a>
+					</span>
+					<span class="text back-to-home">
+						<a href="/" class="text signup-text">Вернуться на главную</a>
 					</span>
 				</div>
 			</div>
@@ -114,6 +168,10 @@
 		border-bottom-color: #4070f4;
 	}
 
+	.input-field input.invalid {
+		border-bottom-color: red;
+	}
+
 	.input-field i {
 		position: absolute;
 		top: 50%;
@@ -134,13 +192,6 @@
 
 	.showHidePw {
 		right: 0;
-	}
-
-	.checkbox-text {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-top: 20px;
 	}
 
 	.form .text {
@@ -178,7 +229,13 @@
 	}
 
 	.form .login-signup {
+		display: flex;
+		flex-direction: column;
 		margin-top: 20px;
 		text-align: center;
+	}
+
+	.back-to-home {
+		margin-top: 10px;
 	}
 </style>
