@@ -11,7 +11,7 @@
 			data-te-ripple-color="primary"
 		>
 			<img id="te-logo" class="mr-2 w-6" src={logo} alt="Registry office" draggable="false" />
-			<span class="text-text hover:text-text-hover">Reggistry Office</span>
+			<span class="text-text hover:text-text-hover hover:no-underline">Reggistry Office</span>
 		</a>
 	</div>
 	<ul class="relative m-0 list-none px-[0.2rem] pb-12" data-te-sidenav-menu-ref>
@@ -218,5 +218,8 @@
 <style>
 	.SideBar {
 		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+	}
+	.logo a {
+		text-decoration: none;
 	}
 </style>
