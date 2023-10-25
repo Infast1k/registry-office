@@ -1,35 +1,56 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { check_email, check_password, equals_password } from '$lib/scripts/form-validate.js';
+	import axios from 'axios';
 
 	let email = '';
 	let password1 = '';
 	let password2 = '';
 
-	let invalid_email = false;
-	let invalid_password = false;
-	let invalid_equals = false;
+	let valid_email = true;
+	let valid_password = true;
+	let equals_passwords = true;
 
 	let show_password = false;
 
-	function validate() {
-		var valid_email = check_email(email);
-		var valid_password1 = check_password(password1);
-		var equals_passwords = equals_password(password1, password2);
+	let error = '';
 
-		if (valid_email && valid_password1 && equals_passwords) {
-			// Функция ругистрации
-			// Обработка ответа с сервера
-			goto('/login');
-			return;
+	function validate() {
+		valid_email = check_email(email);
+		valid_password = check_password(password1);
+		equals_passwords = equals_password(password1, password2);
+
+		if (valid_email && valid_password && equals_passwords) {
+			console.log('Регистрация сработала');
+			axios
+				.post('http://localhost:8000/api/v1/auth/users/', {
+					email: email,
+					password: password1
+				})
+				.then((res) => {
+					goto('/login');
+				})
+				.catch((err) => {
+					error = 'Данная почта уже используется!';
+					email = '';
+					password1 = '';
+					password2 = '';
+					valid_email = false;
+					valid_password = false;
+					equals_passwords = false;
+				});
 		}
 
-		email = '';
-		password1 = '';
-		password2 = '';
-		invalid_email = true;
-		invalid_password = true;
-		invalid_equals = true;
+		if (!valid_email) {
+			email = '';
+		}
+		if (!valid_password) {
+			password1 = '';
+			password2 = '';
+		}
+		if (!equals_passwords) {
+			password2 = '';
+		}
 	}
 </script>
 
@@ -40,12 +61,17 @@
 				<div class="title-block">
 					<span class="title">Регистрация</span>
 				</div>
+				{#if error}
+					<div class="error-block">
+						<span class="error">{error}</span>
+					</div>
+				{/if}
 				<form action="#">
-					<div class="input-field">
+					<div class="input-field email-field">
 						<input
 							type="text"
-							class={invalid_email ? 'invalid' : ''}
-							placeholder={invalid_email ? 'Некорректная почта' : 'Введите почту'}
+							class={valid_email ? '' : 'invalid'}
+							placeholder={valid_email ? 'Введите почту' : 'Некорректная почта'}
 							bind:value={email}
 							required
 						/>
@@ -55,8 +81,8 @@
 						{#if show_password}
 							<input
 								type="text"
-								placeholder={invalid_password ? 'Некорректный пароль' : 'Введите пароль'}
-								class={invalid_password ? 'invalid' : ''}
+								placeholder={valid_password ? 'Введите пароль' : 'Некорректный пароль'}
+								class={valid_password ? '' : 'invalid'}
 								bind:value={password1}
 								required
 							/>
@@ -64,8 +90,8 @@
 						{:else}
 							<input
 								type="password"
-								placeholder={invalid_password ? 'Некорректный пароль' : 'Введите пароль'}
-								class={invalid_password ? 'invalid' : ''}
+								placeholder={valid_password ? 'Введите пароль' : 'Некорректный пароль'}
+								class={valid_password ? '' : 'invalid'}
 								bind:value={password1}
 								required
 							/>
@@ -76,8 +102,8 @@
 						{#if show_password}
 							<input
 								type="text"
-								placeholder={invalid_equals ? 'Некорректный пароль' : 'Введите пароль'}
-								class={invalid_equals ? 'invalid' : ''}
+								placeholder={equals_passwords ? 'Подтвердите пароль' : 'Некорректный пароль'}
+								class={equals_passwords ? '' : 'invalid'}
 								bind:value={password2}
 								required
 							/>
@@ -93,8 +119,8 @@
 						{:else}
 							<input
 								type="password"
-								placeholder={invalid_equals ? 'Пароли не совпадают' : 'Введите пароль'}
-								class={invalid_equals ? 'invalid' : ''}
+								placeholder={equals_passwords ? 'Подтвердите пароль' : 'Некорректный пароль'}
+								class={equals_passwords ? '' : 'invalid'}
 								bind:value={password2}
 								required
 							/>
@@ -149,6 +175,17 @@
 		text-align: center;
 	}
 
+	.error-block {
+		text-align: center;
+		margin-top: 25px;
+		border: 1px solid red;
+		border-radius: 50px;
+	}
+
+	.error-block .error {
+		font-weight: 500;
+	}
+
 	.form {
 		padding: 30px;
 	}
@@ -174,6 +211,10 @@
 		height: 50px;
 		width: 100%;
 		margin-top: 30px;
+	}
+
+	.email-field {
+		margin-top: 25px;
 	}
 
 	.input-field input {

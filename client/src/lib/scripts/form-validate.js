@@ -28,7 +28,7 @@ export function check_email(email) {
 
 export function check_password(password) {
     // Функция валидации пароля
-    const min_len = 3;
+    const min_len = 8;
     const max_len = 50;
 
     if (password === '') {

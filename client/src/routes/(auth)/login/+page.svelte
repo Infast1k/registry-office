@@ -1,31 +1,52 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { check_email, check_password } from '$lib/scripts/form-validate.js';
+	import axios from 'axios';
 
 	let email = '';
 	let password = '';
 
-	let invalid_email = false;
-	let invalid_password = false;
+	let valid_email = true;
+	let valid_password = true;
 
 	let show_password = false;
 
+	let error = '';
+
 	function validate() {
-		var valid_email = check_email(email);
-		var valid_password = check_password(password);
+		valid_email = check_email(email);
+		valid_password = check_password(password);
 
 		if (valid_email && valid_password) {
-			// Функция авторизации
-			// Обработка ответа с сервера
-			// Сохранение токена в store
-			goto('/profile');
+			axios
+				.post('http://localhost:8000/api/v1/auth/token/login/', {
+					email: email,
+					password: password
+				})
+				.then((response) => {
+					// Сохранение почты и токена в UserStore
+					console.log(response.data.auth_token);
+				})
+				.catch((errors) => {
+					error = 'Некорректная почта или пароль';
+					password = '';
+					valid_password = false;
+					valid_email = false;
+				});
+
+			// Редирект на страницу профиля
+			// goto('/profile');
 			return;
 		}
 
-		email = '';
-		password = '';
-		invalid_email = true;
-		invalid_password = true;
+		if (!valid_email) {
+			email = '';
+			valid_email = false;
+		}
+		if (!valid_password) {
+			password = '';
+			valid_password = false;
+		}
 	}
 </script>
 
@@ -36,12 +57,17 @@
 				<div class="title-block">
 					<span class="title">Авторизация</span>
 				</div>
+				{#if error}
+					<div class="error-block">
+						<span class="error">{error}</span>
+					</div>
+				{/if}
 				<form action="#">
-					<div class="input-field">
+					<div class="input-field email-field">
 						<input
 							type="text"
-							class={invalid_email ? 'invalid' : ''}
-							placeholder={invalid_email ? 'Некорректная почта' : 'Введите почту'}
+							class={valid_email ? '' : 'invalid'}
+							placeholder={valid_email ? 'Введите почту' : 'Некорректная почта'}
 							bind:value={email}
 							required
 						/>
@@ -51,8 +77,8 @@
 						{#if show_password}
 							<input
 								type="text"
-								placeholder={invalid_password ? 'Некорректный пароль' : 'Введите пароль'}
-								class={invalid_password ? 'invalid' : ''}
+								placeholder={valid_password ? 'Введите пароль' : 'Некорректный пароль'}
+								class={valid_password ? '' : 'invalid'}
 								bind:value={password}
 								required
 							/>
@@ -68,8 +94,8 @@
 						{:else}
 							<input
 								type="password"
-								placeholder={invalid_password ? 'Некорректный пароль' : 'Введите пароль'}
-								class={invalid_password ? 'invalid' : ''}
+								placeholder={valid_password ? 'Введите пароль' : 'Некорректный пароль'}
+								class={valid_password ? '' : 'invalid'}
 								bind:value={password}
 								required
 							/>
@@ -124,6 +150,17 @@
 		text-align: center;
 	}
 
+	.error-block {
+		text-align: center;
+		margin-top: 30px;
+		border: 1px solid red;
+		border-radius: 50px;
+	}
+
+	.error-block .error {
+		font-weight: 500;
+	}
+
 	.form {
 		padding: 30px;
 	}
@@ -149,6 +186,10 @@
 		height: 50px;
 		width: 100%;
 		margin-top: 30px;
+	}
+
+	.email-field {
+		margin-top: 25px;
 	}
 
 	.input-field input {
