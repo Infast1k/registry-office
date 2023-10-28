@@ -1,11 +1,16 @@
 <script>
 	import '../../app.css';
-	import Header from '../../lib/components/Header.svelte';
+	import Sidebar from '$lib/components/Sidebar.svelte';
 </script>
 
-<div class="flex justify-start bg-main">
-	<Header />
-	<div class="main">
-		<slot />
-	</div>
-</div>
+<main>
+	<Sidebar />
+	<slot />
+</main>
+
+<style>
+	main {
+		height: 100vh;
+		background: var(--body-color);
+	}
+</style>
