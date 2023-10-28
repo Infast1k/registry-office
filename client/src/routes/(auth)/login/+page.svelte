@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { check_email, check_password } from '$lib/scripts/form-validate.js';
 	import axios from 'axios';
+	import { user } from '$lib/stores/userStore.js';
 
 	let email = '';
 	let password = '';
@@ -25,7 +26,10 @@
 				})
 				.then((response) => {
 					// Сохранение почты и токена в UserStore
-					console.log(response.data.auth_token);
+					$user.email = email;
+					$user.token = response.data.auth_token;
+					goto('/');
+					return;
 				})
 				.catch((errors) => {
 					error = 'Некорректная почта или пароль';
@@ -33,9 +37,6 @@
 					valid_password = false;
 					valid_email = false;
 				});
-
-			// Редирект на страницу профиля
-			// goto('/profile');
 			return;
 		}
 

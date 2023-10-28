@@ -1,10 +1,12 @@
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
+<script>
+	import { user } from '$lib/stores/userStore.js';
+</script>
 
 <section>
 	<h1>Какая то инфа</h1>
+	<h2>{$user.email}</h2>
+	<h2>{$user.token}</h2>
+	<h2>{$user.image}</h2>
 </section>
 
 <style>
