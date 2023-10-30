@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
+from datetime import datetime
 
 
 class CustomUserManager(UserManager):
@@ -34,7 +35,7 @@ class CustomUserManager(UserManager):
 
 
 class User(AbstractUser):
-    "Auth-данный пользователей"
+    """Auth-данный пользователей"""
     first_name = None
     last_name = None
     username = None
@@ -77,6 +78,10 @@ class Role(models.Model):
         verbose_name_plural = 'roles'
 
 
+def user_directory_path(instance, filename):
+    return f'{instance.phone}/{datetime.now()}'
+
+
 class Profile(models.Model):
     """Профили пользователей"""
     last_name = models.CharField(max_length=20, null=False)
@@ -85,13 +90,13 @@ class Profile(models.Model):
     sex = models.CharField(max_length=10, null=False)
     birth_date = models.DateField(null=False)
     phone = models.CharField(max_length=20, null=False, unique=True)
-    # TODO: Сделать таблицу паспорт и свидетельство о рождении + связи
-    # pasport
-    # birth_sertificate
+    pasport = models.OneToOneField('users.Pasport', on_delete=models.CASCADE, null=False)
+    birth_sertificate = models.OneToOneField('users.BirthSertificate', on_delete=models.CASCADE, null=False)
     adress = models.CharField(max_length=100, null=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    # Image
+    # TODO: Сделать значение по умолчанию
+    Image = models.ImageField(upload_to=user_directory_path, null=True)
 
     def __str__(self) -> str:
         return f"{self.last_name} {self.first_name} {self.patronymic}"
@@ -99,3 +104,32 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'profile'
         verbose_name_plural = 'profiles'
+
+
+class Pasport(models.Model):
+    """Паспорта пользователей"""
+    numbers = models.PositiveIntegerField(unique=True, null=False)
+    series = models.PositiveIntegerField(unique=True, null=False)
+    registration_place = models.CharField(max_length=100, null=False)
+    created_at = models.DateField()
+
+    def __str__(self) -> str:
+        return f"{self.numbers} - {self.series}"
+
+    class Meta:
+        verbose_name = 'pasport'
+        verbose_name_plural = 'pasports'
+
+
+class BirthSertificate(models.Model):
+    """Свидетельства о рождении пользователей"""
+    registration_place = models.CharField(max_length=100, null=False)
+    place_of_birth = models.CharField(max_length=100, null=False)
+    vital_record = models.PositiveIntegerField(unique=True)
+
+    def __str__(self) -> str:
+        return f"{self.vital_record}"
+
+    class Meta:
+        verbose_name = 'birth sertificate'
+        verbose_name_plural = 'birth sertificates'
