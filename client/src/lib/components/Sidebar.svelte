@@ -23,10 +23,10 @@
 				<input type="search" placeholder="Search..." />
 			</li>
 			<ul class="menu-links">
-				<li class="nav-link">
+				<li class="nav-link active">
 					<a href="#!">
 						<i class="bx bx-home-alt icon" />
-						<span class="text nav-text">Dashboard</span>
+						<span class="text nav-text">Главная</span>
 					</a>
 				</li>
 				<li class="nav-link">
@@ -74,13 +74,12 @@
 
 <style>
 	.sidebar {
-		position: fixed;
 		top: 0;
 		left: 0;
 		height: 100%;
 		width: 250px;
 		padding: 10px 14px;
-		background: var(--sidevar-color);
+		background: var(--sidebar-color);
 	}
 
 	.sidebar .text {
@@ -173,7 +172,7 @@
 
 	.sidebar li a:hover .icon,
 	.sidebar li a:hover .text {
-		color: var(--sidevar-color);
+		color: var(--sidebar-color);
 	}
 
 	.sidebar .menu-bar {
