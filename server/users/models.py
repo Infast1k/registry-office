@@ -75,7 +75,10 @@ class Role(models.Model):
 def user_directory_path(instance, filename):
     email = instance.account.email
     username = email.split('@')[0]
-    return f'{username}/{datetime.now()}'
+    ext = filename.split('.')[-1]
+    file = f"{datetime.now()}.{ext}"
+
+    return f'{username}/{file}'
 
 
 class Profile(models.Model):
@@ -92,13 +95,13 @@ class Profile(models.Model):
     sex = models.CharField(max_length=10, null=False)
     birth_date = models.DateField(null=False)
     phone = models.CharField(max_length=20, null=False, unique=True)
-    pasport = models.OneToOneField('users.Pasport', on_delete=models.CASCADE, null=False)
-    birth_sertificate = models.OneToOneField('users.BirthSertificate', on_delete=models.CASCADE, null=False)
+    passport = models.OneToOneField('users.Passport', on_delete=models.CASCADE, null=True)
+    birth_sertificate = models.OneToOneField('users.BirthSertificate', on_delete=models.CASCADE, null=True)
     adress = models.CharField(max_length=100, null=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     # TODO: Сделать значение по умолчанию
-    Image = models.ImageField(upload_to=user_directory_path, null=True)
+    Image = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.last_name} {self.first_name} {self.patronymic}"
@@ -108,7 +111,7 @@ class Profile(models.Model):
         verbose_name_plural = 'profiles'
 
 
-class Pasport(models.Model):
+class Passport(models.Model):
     """Паспорта пользователей"""
     numbers = models.PositiveIntegerField(unique=True, null=False)
     series = models.PositiveIntegerField(unique=True, null=False)
@@ -119,8 +122,8 @@ class Pasport(models.Model):
         return f"{self.numbers} - {self.series}"
 
     class Meta:
-        verbose_name = 'pasport'
-        verbose_name_plural = 'pasports'
+        verbose_name = 'passport'
+        verbose_name_plural = 'passports'
 
 
 class BirthSertificate(models.Model):
