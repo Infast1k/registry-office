@@ -8,11 +8,10 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = ('role_name',)
 
 
-class AccountSerializer(serializers.ModelSerializer):
-    role = RoleSerializer(many=False, read_only=True)
+class PassportSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.User
-        fields = ('email', 'role')
+        model = models.Passport
+        fields = ('numbers', 'series', 'registration_place', 'created_at')
 
 
 class BirthSertificateSerializer(serializers.ModelSerializer):
@@ -21,18 +20,22 @@ class BirthSertificateSerializer(serializers.ModelSerializer):
         fields = ('registration_place', 'place_of_birth', 'vital_record')
 
 
-class PassportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Passport
-        fields = ('numbers', 'series', 'registration_place', 'created_at')
-
-
 class ProfileSerializer(serializers.ModelSerializer):
-    account = AccountSerializer(many=False, read_only=True)
-    birth_sertificate = BirthSertificateSerializer(many=False, read_only=True)
     passport = PassportSerializer(many=False, read_only=True)
+    birth_sertificate = BirthSertificateSerializer(many=False, read_only=True)
     class Meta:
         model = models.Profile
-        fields = ('last_name', 'first_name', 'patronymic', 'sex',
-                  'birth_date', 'phone', 'adress', 'passport',
-                  'birth_sertificate', 'account', 'image')
+        fields = ('last_name', 'first_name', 'patronymic', 'sex', 'birth_date',
+                  'phone', 'passport', 'birth_sertificate', 'adress', 'image')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(many=False, read_only=True)
+    role = RoleSerializer(many=False, read_only=True)
+    class Meta:
+        model = models.User
+        fields = ('email', 'profile', 'role')
+
+
+class CreateProfileSerializer(serializers.ModelSerializer):
+    ...

@@ -40,12 +40,18 @@ class User(AbstractUser):
     last_name = None
     username = None
     email = models.EmailField(unique=True, blank=False, null=False)
+    profile= models.OneToOneField(
+        'users.Profile',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     role = models.ForeignKey(
         'users.Role',
         on_delete=models.CASCADE,
         null=False,
         blank=True,
-        default=1
+        default=4
     )
 
     USERNAME_FIELD = 'email'
@@ -73,12 +79,10 @@ class Role(models.Model):
 
 
 def user_directory_path(instance, filename):
-    email = instance.account.email
-    username = email.split('@')[0]
+    username = f"{instance.phone}"
     ext = filename.split('.')[-1]
     file = f"{datetime.now()}.{ext}"
-
-    return f'{username}/{file}'
+    return f"{username}/{file}"
 
 
 class Profile(models.Model):
@@ -86,12 +90,6 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=20, null=False)
     first_name = models.CharField(max_length=20, null=False)
     patronymic = models.CharField(max_length=20, null=True)
-    account = models.OneToOneField(
-        'users.User',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
     sex = models.CharField(max_length=10, null=False)
     birth_date = models.DateField(null=False)
     phone = models.CharField(max_length=20, null=False, unique=True)
