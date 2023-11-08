@@ -101,7 +101,7 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     # TODO: Сделать значение по умолчанию
-    Image = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
+    image = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.last_name} {self.first_name} {self.patronymic}"
