@@ -22,12 +22,31 @@ class ProfileView(APIView):
     def post(self, request):
         """Создание профиля если не существует/редактирование профиля если существует"""
         user_id = request.user.pk
+        user = User.objects.get(id=user_id)
         profile_exists = self.profile_exists(user_id)
         if profile_exists:
-            # Редактирование существующего профиля
-            return HttpResponse("Профиль существует, тут будет обновление")
+            # Редактирование пасспорта
+            passport = Passport.objects.get(id=user.profile.passport.id)
+            passport.numbers = request.data.get("numbers", passport.numbers)
+            passport.series = request.data.get("series", passport.series)
+            passport.registration_place = request.data.get("registration_place", passport.registration_place)
+            passport.created_at = request.data.get("created_at", passport.created_at)
+            passport.save()
+
+            # Редактирование профиля
+            profile = Profile.objects.get(id=user.profile.id)
+            profile.last_name = request.data.get("last_name", profile.last_name)
+            profile.first_name = request.data.get("first_name", profile.first_name)
+            profile.patronymic = request.data.get("patronymic", profile.patronymic)
+            profile.sex = request.data.get("sex", profile.sex)
+            profile.birth_date = request.data.get("birth_date", profile.birth_date)
+            profile.phone = request.data.get("phone", profile.phone)
+            profile.adress = request.data.get("adress", profile.adress)
+            profile.image = request.data.get("image", profile.image)
+            profile.save()
+            return Response({"message": "данные были обновлены"}, status=status.HTTP_202_ACCEPTED)
         
-        # Создание паспорта
+        # Создание нового профиля
         passport = Passport.objects.create(
             numbers = request.data.get("numbers"),
             series = request.data.get("series"),
@@ -45,7 +64,6 @@ class ProfileView(APIView):
             passport_id = passport.id,
             image = request.data.get("image")
         )
-        user = User.objects.get(id=user_id)
         user.profile_id = profile.id
         user.save()
         serialize_data = UserSerializer(user, many=False)

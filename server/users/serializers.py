@@ -35,7 +35,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ('email', 'profile', 'role')
-
-
-class CreateProfileSerializer(serializers.ModelSerializer):
-    ...
