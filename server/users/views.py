@@ -40,7 +40,7 @@ class ProfileView(APIView):
             profile.sex = request.data.get("sex", profile.sex)
             profile.birth_date = request.data.get("birth_date", profile.birth_date)
             profile.phone = request.data.get("phone", profile.phone)
-            profile.adress = request.data.get("adress", profile.adress)
+            profile.address = request.data.get("address", profile.address)
             profile.image = request.data.get("image", profile.image)
             profile.save()
             return Response({"message": "данные были обновлены"}, status=status.HTTP_202_ACCEPTED)
@@ -59,7 +59,7 @@ class ProfileView(APIView):
             sex = request.data.get("sex"),
             birth_date = request.data.get("birth_date"),
             phone = request.data.get("phone"),
-            adress = request.data.get("adress"),
+            address = request.data.get("address"),
             passport_id = passport.id,
             image = request.data.get("image")
         )

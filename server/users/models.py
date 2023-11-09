@@ -95,7 +95,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=20, null=False, unique=True)
     passport = models.OneToOneField('users.Passport', on_delete=models.CASCADE, null=True)
     birth_sertificate = models.OneToOneField('users.BirthSertificate', on_delete=models.CASCADE, null=True)
-    adress = models.CharField(max_length=100, null=False)
+    address = models.CharField(max_length=100, null=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     # TODO: Сделать значение по умолчанию
