@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -74,3 +73,30 @@ class RelativeDetailView(APIView):
             return Response({"message": "запись была успешно удалена"}, status=status.HTTP_200_OK)
         # Возвращаем сообщение о том, что запись с таким id не существуте + статус 400_BAD_REQUEST
         return Response({"message": f"запись с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id):
+        """Метод для обновления записи о родственнике текущего пользователя"""
+        # Находим нужную запись по id
+        try:
+            relative = Relatives.objects.get(id=id)
+            # Находим статус по имени
+            status_name = request.data.get("status_name")
+            relative_status = RelativeStatus.objects.get(status_name=status_name)
+            # Обновляем запись
+            # Второй параметр снова упускаем, т.к. с фронта нам будут приходить все поля.
+            relative.abstract_profile.last_name = request.data.get("last_name")
+            relative.abstract_profile.first_name = request.data.get("first_name")
+            relative.abstract_profile.patronymic = request.data.get("patronymic")
+            relative.abstract_profile.phone = request.data.get("phone")
+            relative.abstract_profile.birth_date = request.data.get("birth_date")
+            relative.abstract_profile.address = request.data.get("address")
+            relative.status = relative_status
+            # Сохраняем обновление абстрактного профиля
+            relative.abstract_profile.save()
+            # Сохраняем обновление статуса
+            relative.save()
+            # Возвращаем сообщение о том, что запись успешно обновлена + статус 200_OK
+            return Response({"message": "запись была успешно обновлена"}, status=status.HTTP_200_OK)
+        except Relatives.DoesNotExist:
+            # Возвращаем сообщение о том, что записи с таким id не существет + статус 400_BAD_EEQUEST
+            return Response({"message": f"запись с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
