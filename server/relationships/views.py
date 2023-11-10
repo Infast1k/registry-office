@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -58,3 +59,18 @@ class RelativesView(APIView):
         # Ошибки не может быть т.к. с клиентской стороны будет проходить валидация данных,
         # если данные не валидны, то он просто не сможет попасть в этот метод.
         return Response({"message": "запись была успешно сохранена"}, status=status.HTTP_201_CREATED)
+
+
+class RelativeDetailView(APIView):
+    def delete(self, request, id):
+        """Метод для удаления записи о родственнике текущего пользователя"""
+        # Находим нужную запись по id
+        relative = Relatives.objects.filter(id=id)
+        # Если запись с таким id существует, то заходим в блок if.
+        if relative:
+            # Удаляем запись
+            relative.delete()
+            # Возвращаем сообщение об успешном удалении записи + статуст 200_OK
+            return Response({"message": "запись была успешно удалена"}, status=status.HTTP_200_OK)
+        # Возвращаем сообщение о том, что запись с таким id не существуте + статус 400_BAD_REQUEST
+        return Response({"message": f"запись с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
