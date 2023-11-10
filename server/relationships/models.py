@@ -34,7 +34,7 @@ class Relatives(models.Model):
     status = models.ForeignKey("relationships.RelativeStatus", null=False, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.abstract_profile
+        return f"{self.user} - {self.abstract_profile}"
 
     class Meta:
         verbose_name = "relative"

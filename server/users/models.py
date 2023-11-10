@@ -59,7 +59,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self) -> str:
-        return self.email
+        return f"{self.email}"
 
     class Meta:
         verbose_name = 'user'
