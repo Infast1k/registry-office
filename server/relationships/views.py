@@ -25,39 +25,42 @@ class RelativesView(APIView):
         user_id = request.user.pk
         # Получаем пользователя по id т.к. иначе не работает (не понял сам почему)
         user = User.objects.get(id=user_id)
-        # Создание обстрактного пользователя
-        # Он содержит меньше данных чем обычный профиль
-        # т.к. для родственников нам много не надо.
-        profile = AbstractProfile.objects.create(
-            # request.data имеет структуру типа словаря, поэтому мы можем использовать
-            # метод get, который берет значение по ключу (первый аргумент),
-            # если такого ключа нет, то возвращает значение по умолчанию (второй аргумент).
-            # В нашем случае мы его не пишем, т.к. в моделях мы указали,
-            # что все поля имеют ограничение blank=False.
-            # Это означает, что поле обязательно при отправке запроса.
-            last_name = request.data.get("last_name"),
-            first_name = request.data.get("first_name"),
-            patronymic = request.data.get("patronymic"),
-            phone = request.data.get("phone"),
-            birth_date = request.data.get("birth_date"),
-            address = request.data.get("address")
-        )
-        # Получаем значение поля status_name из запроса.
-        status_name = request.data.get("status_name")
-        # Получаем статус по его имени.
-        # метод get возвращает первое совпадение, он нам подходит т.к.
-        # поле status_name имеет ограничение unique=True.
-        relative_status = RelativeStatus.objects.get(status_name=status_name)
-        # Создание записи о родственнике
-        Relatives.objects.create(
-            user = user,
-            abstract_profile = profile,
-            status = relative_status
-        )
-        # Возврат сообщения об успешном сохранении записи о родственнике.
-        # Ошибки не может быть т.к. с клиентской стороны будет проходить валидация данных,
-        # если данные не валидны, то он просто не сможет попасть в этот метод.
-        return Response({"message": "запись была успешно сохранена"}, status=status.HTTP_201_CREATED)
+        try:
+            # Создание обстрактного пользователя
+            # Он содержит меньше данных чем обычный профиль
+            # т.к. для родственников нам много не надо.
+            profile = AbstractProfile.objects.create(
+                # request.data имеет структуру типа словаря, поэтому мы можем использовать
+                # метод get, который берет значение по ключу (первый аргумент),
+                # если такого ключа нет, то возвращает значение по умолчанию (второй аргумент).
+                # В нашем случае мы его не пишем, т.к. в моделях мы указали,
+                # что все поля имеют ограничение blank=False.
+                # Это означает, что поле обязательно при отправке запроса.
+                last_name = request.data.get("last_name"),
+                first_name = request.data.get("first_name"),
+                patronymic = request.data.get("patronymic"),
+                phone = request.data.get("phone"),
+                birth_date = request.data.get("birth_date"),
+                address = request.data.get("address")
+            )
+            # Получаем значение поля status_name из запроса.
+            status_name = request.data.get("status_name")
+            # Получаем статус по его имени.
+            # метод get возвращает первое совпадение, он нам подходит т.к.
+            # поле status_name имеет ограничение unique=True.
+            relative_status = RelativeStatus.objects.get(status_name=status_name)
+            # Создание записи о родственнике
+            Relatives.objects.create(
+                user = user,
+                abstract_profile = profile,
+                status = relative_status
+            )
+            # Возврат сообщения об успешном сохранении записи о родственнике.
+            # Ошибки не может быть т.к. с клиентской стороны будет проходить валидация данных,
+            # если данные не валидны, то он просто не сможет попасть в этот метод.
+            return Response({"message": "запись была успешно сохранена"}, status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response({"message": "пользователь с такими данными уже существует"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RelativeDetailView(APIView):
@@ -72,7 +75,7 @@ class RelativeDetailView(APIView):
             # Возвращаем сообщение об успешном удалении записи + статуст 200_OK
             return Response({"message": "запись была успешно удалена"}, status=status.HTTP_200_OK)
         # Возвращаем сообщение о том, что запись с таким id не существуте + статус 400_BAD_REQUEST
-        return Response({"message": f"запись с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": f"записи с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
         """Метод для обновления записи о родственнике текущего пользователя"""
@@ -99,4 +102,4 @@ class RelativeDetailView(APIView):
             return Response({"message": "запись была успешно обновлена"}, status=status.HTTP_200_OK)
         except Relatives.DoesNotExist:
             # Возвращаем сообщение о том, что записи с таким id не существет + статус 400_BAD_EEQUEST
-            return Response({"message": f"запись с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": f"записи с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
