@@ -11,13 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
-import os
-
-
-# Initialize .env files
-load_dotenv()
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +43,7 @@ INSTALLED_APPS = [
     'djoser',
     'users',
     'relationships',
+    'wedding',
 ]
 
 MIDDLEWARE = [
@@ -89,16 +83,18 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE'),
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'ENGINE': "django.db.backends.postgresql_psycopg2",
+        'NAME': "registry_office",
+        'USER': "postgres",
+        'PASSWORD': "Nas-10122003",
+        'HOST': "localhost",
+        # 'PORT': "3306"
+        'PORT': "5432",
 
-        'OPTIONS': {
-            'init_command': 'SET foreign_key_checks = 0;',
-        },
+
+        # 'OPTIONS': {
+        #     'init_command': 'SET foreign_key_checks = 0;',
+        # },
     }
 }
 
