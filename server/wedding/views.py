@@ -17,6 +17,7 @@ class WeddingListView(APIView):
     def post(self, request):
         """Метод для создания заявления для брака"""
         user = User.objects.get(id=request.user.id) 
+
         try:
             passport = Passport.objects.get(
                 numbers = request.data.get("numbers"),
@@ -31,7 +32,10 @@ class WeddingListView(APIView):
                 registration_place = request.data.get("registration_place"),
                 created_at = request.data.get("created_at")
             )
+
         try:
+            if user.profile.sex == request.data.get("sex"):
+                raise SameSexException()
             profile = Profile.objects.get(
                 last_name=request.data.get("last_name"),
                 first_name=request.data.get("first_name"),
@@ -42,6 +46,8 @@ class WeddingListView(APIView):
                 passport=passport,
                 address=request.data.get("address")
             )
+        except SameSexException:
+            return Response({"error": "Однополые браки запрещены!"}, status=status.HTTP_400_BAD_REQUEST)
         except Profile.DoesNotExist:
             profile = Profile.objects.create(
                 last_name=request.data.get("last_name"),
@@ -54,23 +60,15 @@ class WeddingListView(APIView):
                 address=request.data.get("address")
             )
         
-        try:
-            wedding = Wedding.objects.create(
-                user=user,
-                profile=profile,
-                change_last_name=request.data.get("change_last_name"),
-                event_datetime=request.data.get("event_datetime"),
-            )
+        wedding = Wedding.objects.create(
+            user=user,
+            profile=profile,
+            change_last_name=request.data.get("change_last_name"),
+            event_datetime=request.data.get("event_datetime"),
+        )
 
-            if user.profile.sex.lower() == profile.sex.lower():
-                raise SameSexException()
-
-            wedding_clear = WeddingSerializer(wedding, many=False)
-            return Response(wedding_clear.data, status=status.HTTP_201_CREATED)
-        except SameSexException as e:
-            Passport.objects.get(id=profile.passport.id).delete()
-            Profile.objects.get(id=profile.id).delete()
-            return Response({"error": e}, status=status.HTTP_400_BAD_REQUEST)
+        wedding_clear = WeddingSerializer(wedding, many=False)
+        return Response(wedding_clear.data, status=status.HTTP_201_CREATED)
 
 
 class CurrentUserWeddingView(APIView):
