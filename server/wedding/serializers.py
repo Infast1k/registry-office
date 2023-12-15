@@ -16,4 +16,4 @@ class WeddingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wedding
-        fields = ('user', 'profile', 'change_last_name', 'event_datetime', 'status')
+        fields = ('id', 'user', 'profile', 'change_last_name', 'event_datetime', 'status')
