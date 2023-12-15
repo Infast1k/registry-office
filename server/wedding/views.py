@@ -1,0 +1,86 @@
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+from django.db.models import Q
+from wedding.exceptions import SameSexException
+
+from wedding.serializers import WeddingSerializer
+from .models import Wedding
+from users.models import Profile, Passport, User
+
+
+class WeddingListView(APIView):
+    def get(self, request):
+        """Метод для получения списка всех заявлений на рассмотрении"""
+        ...
+    
+    def post(self, request):
+        """Метод для создания заявления для брака"""
+        user = User.objects.get(id=request.user.id) 
+        try:
+            passport = Passport.objects.get(
+                numbers = request.data.get("numbers"),
+                series = request.data.get("series"),
+                registration_place = request.data.get("registration_place"),
+                created_at = request.data.get("created_at")
+            )
+        except Passport.DoesNotExist:
+            passport = Passport.objects.create(
+                numbers = request.data.get("numbers"),
+                series = request.data.get("series"),
+                registration_place = request.data.get("registration_place"),
+                created_at = request.data.get("created_at")
+            )
+        try:
+            profile = Profile.objects.get(
+                last_name=request.data.get("last_name"),
+                first_name=request.data.get("first_name"),
+                patronymic=request.data.get("patronymic"),
+                sex=request.data.get("sex"),
+                birth_date=request.data.get("birth_date"),
+                phone=request.data.get("phone"),
+                passport=passport,
+                address=request.data.get("address")
+            )
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(
+                last_name=request.data.get("last_name"),
+                first_name=request.data.get("first_name"),
+                patronymic=request.data.get("patronymic"),
+                sex=request.data.get("sex"),
+                birth_date=request.data.get("birth_date"),
+                phone=request.data.get("phone"),
+                passport=passport,
+                address=request.data.get("address")
+            )
+        
+        try:
+            wedding = Wedding.objects.create(
+                user=user,
+                profile=profile,
+                change_last_name=request.data.get("change_last_name"),
+                event_datetime=request.data.get("event_datetime"),
+            )
+
+            if user.profile.sex.lower() == profile.sex.lower():
+                raise SameSexException()
+
+            wedding_clear = WeddingSerializer(wedding, many=False)
+            return Response(wedding_clear.data, status=status.HTTP_201_CREATED)
+        except SameSexException as e:
+            Passport.objects.get(id=profile.passport.id).delete()
+            Profile.objects.get(id=profile.id).delete()
+            return Response({"error": e}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CurrentUserWeddingView(APIView):
+    def get(self, request):
+        """Метод для отображения договоров текущего пользователя"""
+        # Берем текущего пользователя
+        user = User.objects.get(id=request.user.id)
+        # Получаем список договоров (беруться договоры и как создателя, так и profile user)
+        weddings = Wedding.objects.filter(Q(user=user) | Q(profile=user.profile))
+        # Сериализируем данные
+        weddings_clear = WeddingSerializer(weddings, many=True)
+        # Возвращаем респонс
+        return Response(weddings_clear.data, status=status.HTTP_200_OK)

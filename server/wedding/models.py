@@ -5,7 +5,7 @@ class Wedding(models.Model):
     profile = models.ForeignKey("users.Profile", on_delete=models.CASCADE)
     change_last_name = models.BooleanField(null=False, default=True)
     status = models.ForeignKey('wedding.WeddingStatus', on_delete=models.CASCADE, default=1)
-    event_datatime = models.DateTimeField(blank=False, null=False)
+    event_datetime = models.DateTimeField(blank=False, null=False)
 
 
 class WeddingStatus(models.Model):

@@ -51,7 +51,7 @@ class User(AbstractUser):
         on_delete=models.CASCADE,
         null=False,
         blank=True,
-        default=4
+        default=1
     )
 
     USERNAME_FIELD = 'email'
