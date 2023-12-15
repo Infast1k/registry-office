@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from django.db import IntegrityError
 from django.db.models import Q
 from wedding.exceptions import SameSexException
 
@@ -60,15 +61,17 @@ class WeddingListView(APIView):
                 address=request.data.get("address")
             )
         
-        wedding = Wedding.objects.create(
-            user=user,
-            profile=profile,
-            change_last_name=request.data.get("change_last_name"),
-            event_datetime=request.data.get("event_datetime"),
-        )
-
-        wedding_clear = WeddingSerializer(wedding, many=False)
-        return Response(wedding_clear.data, status=status.HTTP_201_CREATED)
+        try:
+            wedding = Wedding.objects.create(
+                user=user,
+                profile=profile,
+                change_last_name=request.data.get("change_last_name"),
+                event_datetime=request.data.get("event_datetime"),
+            )
+            wedding_clear = WeddingSerializer(wedding, many=False)
+            return Response(wedding_clear.data, status=status.HTTP_201_CREATED)
+        except IntegrityError as e:
+            return Response({"error": "договор для данных пользователей уже существует"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CurrentUserWeddingView(APIView):

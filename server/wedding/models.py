@@ -7,6 +7,16 @@ class Wedding(models.Model):
     status = models.ForeignKey('wedding.WeddingStatus', on_delete=models.CASCADE, default=1)
     event_datetime = models.DateTimeField(blank=False, null=False)
 
+    def __str__(self) -> str:
+        user = self.user
+        profile = self.profile
+        return f"{user.last_name, user.first_name, user.patronymic} - {profile.last_name, profile.first_name, profile.patronymic}"
+    
+    class Meta:
+        verbose_name = "wedding"
+        verbose_name_plural = "weddings"
+        unique_together = ["user", "profile"]
+
 
 class WeddingStatus(models.Model):
     status_name = models.CharField(max_length=50, null=False, unique=True)
