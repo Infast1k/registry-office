@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'relationships',
     'wedding',
     'employee',
+    'admin',
 ]
 
 MIDDLEWARE = [
