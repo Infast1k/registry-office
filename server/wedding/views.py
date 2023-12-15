@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,8 +12,10 @@ from users.models import Profile, Passport, User
 
 class WeddingListView(APIView):
     def get(self, request):
-        """Метод для получения списка всех заявлений на рассмотрении"""
-        ...
+        """Метод для получения списка всех заявлений на рассмотрении + одобренных"""
+        weddings = Wedding.objects.filter(Q(status=4) | Q(status=1))
+        weddings_clear = WeddingSerializer(weddings, many=True)
+        return Response(weddings_clear.data, status=status.HTTP_200_OK)
     
     def post(self, request):
         """Метод для создания заявления для брака"""
