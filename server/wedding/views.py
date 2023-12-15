@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -18,6 +19,11 @@ class WeddingListView(APIView):
     def post(self, request):
         """Метод для создания заявления для брака"""
         user = User.objects.get(id=request.user.id) 
+
+        married = len(Wedding.objects.filter(Q(user=user) | Q(profile=user.profile), status=2))
+        if married == 1:
+            return Response({"message": "Невозможно создать договор, данный пользователь уже состоит в браке!"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             passport = Passport.objects.get(

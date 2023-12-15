@@ -8,7 +8,7 @@ class Wedding(models.Model):
     event_datetime = models.DateTimeField(blank=False, null=False)
 
     def __str__(self) -> str:
-        user = self.user
+        user = self.user.profile
         profile = self.profile
         return f"{user.last_name, user.first_name, user.patronymic} - {profile.last_name, profile.first_name, profile.patronymic}"
     
