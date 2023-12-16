@@ -94,12 +94,11 @@ class Profile(models.Model):
     birth_date = models.DateField(null=False)
     phone = models.CharField(max_length=20, null=False, unique=True)
     passport = models.OneToOneField('users.Passport', on_delete=models.CASCADE, null=True)
-    birth_sertificate = models.OneToOneField('users.BirthSertificate', on_delete=models.CASCADE, null=True)
+    birth_sertificate = models.OneToOneField('users.BirthSertificate', on_delete=models.CASCADE, null=True, blank=True)
     address = models.CharField(max_length=100, null=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    # TODO: Сделать значение по умолчанию
-    image = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
+    image = models.ImageField(upload_to=user_directory_path, default="default_image.jpg", null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.last_name} {self.first_name} {self.patronymic}"
