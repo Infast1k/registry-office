@@ -39,15 +39,25 @@ class UserDetailView(APIView):
                             status=status.HTTP_403_FORBIDDEN)
         
         try:
+            # Берем пользователя по id
             user = User.objects.get(id=id)
+            # Берем роль, которую передали в запросе
             role = Role.objects.get(role_name=request.data.get("role"))
+            # Меняем у пользователя роль
             user.role = role
+            # Сохраняем его
             user.save()
+            # Преобразуем Python-dict формат в json
             user_clear = UserSerializer(user, many=False)
+            # Возвращаем новые данные о пользователе + статус 200 ок
             return Response(user_clear.data, status=status.HTTP_200_OK)
+        # Если пользователя с таким id не существует
         except User.DoesNotExist:
+            # Возвращаем информационное сообщение + статус 400 bad request
             return Response({"error": f"пользователя с id {id} не существует!"},
                             status=status.HTTP_400_BAD_REQUEST)
+        # Если роли с таким названием не сущесвтует
         except Role.DoesNotExist:
+            # Возвращаем информационное сообщение + статус 400 bad request
             return Response({"error": f"роли {request.data.get("role")} не существует!"},
                             status=status.HTTP_400_BAD_REQUEST) 
