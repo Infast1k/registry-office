@@ -33,3 +33,10 @@ class Witnesses(models.Model):
     """Таблица для свидетелeй"""
     wedding = models.ForeignKey('wedding.Wedding', on_delete=models.CASCADE)
     witness = models.ForeignKey('relationships.AbstractProfile', on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.wedding.id}. {self.witness.last_name} {self.witness.first_name} {self.witness.patronymic}"
+
+    class Meta:
+        verbose_name = "witness"
+        verbose_name_plural = "witnesses"
