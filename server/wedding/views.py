@@ -6,8 +6,10 @@ from django.db.models import Q
 from wedding.exceptions import SameSexException
 
 from wedding.serializers import WeddingSerializer
-from .models import Wedding
+from .serializers import WitnessSerializer
+from .models import Wedding, Witnesses
 from users.models import Profile, Passport, User
+from relationships.models import AbstractProfile
 
 
 class WeddingListView(APIView):
@@ -102,3 +104,37 @@ class WeddingDetailView(APIView):
             return Response(wedding_clear.data, status=status.HTTP_200_OK)
         except Wedding.DoesNotExist:
             return Response({"error": f"Договора с id {id} не существует!"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WitnessesView(APIView):
+    def post(self, request, id):
+        """Метод для добавления свидетелей к определенной свадьбе (по id)"""
+        try:
+            # Получаем свадьбу по id
+            wedding = Wedding.objects.get(id=id)
+            # Ищем абстрактный профиль по номеру телефона
+            abstract_profile = AbstractProfile.objects.get(phone=request.data.get("phone"))
+        # Если профиля с таким телефоном нет
+        except AbstractProfile.DoesNotExist:
+            # Создаем его
+            abstract_profile = AbstractProfile.objects.create(
+                last_name = request.data.get("last_name"),
+                first_name = request.data.get("first_name"),
+                patronymic = request.data.get("patronymic"),
+                phone = request.data.get("phone"),
+                birth_date = request.data.get("birth_date"),
+                address = request.data.get("address")
+            )
+        # Если свадьбы с таким id не сущесвтует
+        except Wedding.DoesNotExist:
+            # Возвращаем информативное сообщение + статус 400 bad request
+            return Response({"error": f"Свадьбы с id {id} не существует!"}, status=status.HTTP_400_BAD_REQUEST)
+        # Создаем запись в таблицу со свидетелями
+        witness = Witnesses.objects.create(
+            wedding = wedding,
+            witness = abstract_profile
+        ) 
+        # Преобразуем данные из Python-dict в json
+        witness_clear = WitnessSerializer(witness, many=False)
+        # Возвращаем созданную запись + статус 200 ok
+        return Response(witness_clear.data, status=status.HTTP_200_OK)
