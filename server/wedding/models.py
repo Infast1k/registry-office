@@ -31,4 +31,5 @@ class WeddingStatus(models.Model):
 
 class Witnesses(models.Model):
     """Таблица для свидетелeй"""
-    ...
+    wedding = models.ForeignKey('wedding.Wedding', on_delete=models.CASCADE)
+    witness = models.ForeignKey('relationships.AbstractProfile', on_delete=models.CASCADE)

@@ -92,3 +92,13 @@ class CurrentUserWeddingView(APIView):
         weddings_clear = WeddingSerializer(weddings, many=True)
         # Возвращаем респонс
         return Response(weddings_clear.data, status=status.HTTP_200_OK)
+    
+class WeddingDetailView(APIView):
+    def get(self, request, id):
+        """Метод для отображение договора по id"""
+        try:
+            wedding = Wedding.objects.get(id=id)
+            wedding_clear = WeddingSerializer(wedding, many=False)
+            return Response(wedding_clear.data, status=status.HTTP_200_OK)
+        except Wedding.DoesNotExist:
+            return Response({"error": f"Договора с id {id} не существует!"}, status=status.HTTP_400_BAD_REQUEST)
