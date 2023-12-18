@@ -5,26 +5,24 @@
 
 <nav class="sidebar">
 	<header>
-		<div class="image-text">
-			<span class="image">
-				<img src={logo} alt="logo" />
-			</span>
+		<a href="/">
+			<div class="image-text">
+				<span class="image">
+					<img src={logo} alt="logo" />
+				</span>
 
-			<div class="text header-text">
-				<span class="name">CodingLab</span>
-				<span class="profession">Web developer</span>
+				<div class="text header-text">
+					<span class="name">CodingLab</span>
+					<span class="profession">Web developer</span>
+				</div>
 			</div>
-		</div>
+		</a>
 	</header>
 	<div class="menu-bar">
 		<div class="menu">
-			<li class="search-box">
-				<i class="bx bx-search icon" />
-				<input type="search" placeholder="Search..." />
-			</li>
 			<ul class="menu-links">
 				<li class="nav-link active">
-					<a href="#!">
+					<a href="/">
 						<i class="bx bx-home-alt icon" />
 						<span class="text nav-text">Главная</span>
 					</a>
@@ -36,15 +34,15 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="#!">
+					<a href="/my-contracts/">
 						<i class="bx bx-bell icon" />
-						<span class="text nav-text">Notification</span>
+						<span class="text nav-text">Мои договоры</span>
 					</a>
 				</li>
 				<li class="nav-link">
 					<a href="#!">
 						<i class="bx bx-pie-chart-alt icon" />
-						<span class="text nav-text">Analytics</span>
+						<span class="text nav-text">Родственники</span>
 					</a>
 				</li>
 				<li class="nav-link">
@@ -73,6 +71,9 @@
 </nav>
 
 <style>
+	a {
+		text-decoration: none;
+	}
 	.sidebar {
 		top: 0;
 		left: 0;
@@ -141,19 +142,6 @@
 
 	.header-text .profession {
 		margin-top: -2px;
-	}
-
-	.sidebar .search-box {
-		background: var(--primary-color-light);
-	}
-
-	.sidebar input {
-		height: 100%;
-		width: 100%;
-		outline: none;
-		border: none;
-		border-radius: 6px;
-		background: var(--primary-color-light);
 	}
 
 	.sidebar li a {

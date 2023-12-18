@@ -1,12 +1,11 @@
 <script>
-	import { user } from '$lib/stores/userStore.js';
+	import { token, role } from '$lib/stores/userStore.js';
 </script>
 
 <section>
-	<h1>Какая то инфа</h1>
-	<h2>{$user.email}</h2>
-	<h2>{$user.token}</h2>
-	<h2>{$user.image}</h2>
+	<h1>инфа о сайте</h1>
+	<h1>{$token}</h1>
+	<h1>{$role}</h1>
 </section>
 
 <style>
