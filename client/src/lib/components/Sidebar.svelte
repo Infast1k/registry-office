@@ -30,9 +30,9 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="#!">
+					<a href="/contracts/">
 						<i class="bx bx-bar-chart-alt-2 icon" />
-						<span class="text nav-text">Revenue</span>
+						<span class="text nav-text">Все договоры</span>
 					</a>
 				</li>
 				<li class="nav-link">
