@@ -52,9 +52,9 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="#!">
+					<a href="admin/">
 						<i class="bx bx-wallet icon" />
-						<span class="text nav-text">Wallets</span>
+						<span class="text nav-text">Пользователи</span>
 					</a>
 				</li>
 			</ul>
