@@ -4,38 +4,33 @@
 	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
 
-	let last_name = '';
-	let first_name = '';
-	let patronymic = '';
-	let phone = '';
-	let birth_date = '';
-	let address = '';
-	let status = '';
+	export let data;
 
-	function is_empty(last_name, first_name, phone, birth_date, address, status) {
-		if (!last_name || !first_name || !phone || !birth_date || !address || !status) {
+	let last_name = data.relative.last_name;
+	let phone = data.relative.phone;
+	let address = data.relative.address;
+
+	function is_empty(last_name, phone, address) {
+		if (!last_name || !phone || !address) {
 			return true;
 		}
 		return false;
 	}
 
-	function create_relative() {
-		if (is_empty(last_name, first_name, phone, birth_date, address, status)) {
+	function save_changes() {
+		if (is_empty(last_name, phone, address)) {
 			alert('Все поля обязательны для заполнения!');
 			return;
 		}
-		const data = {
+
+		const user_data = {
 			last_name: last_name,
-			first_name: first_name,
-			patronymic: patronymic,
 			phone: phone,
-			birth_date: birth_date,
-			address: address,
-			status_name: status
+			address: address
 		};
 
 		axios
-			.post('http://localhost:8000/api/v1/relatives/', data, {
+			.put(`http://localhost:8000/api/v1/relatives/${data.slug}/`, user_data, {
 				headers: {
 					Authorization: `Token ${get(token)}`
 				}
@@ -51,6 +46,7 @@
 </script>
 
 <div class="container">
+	<h1>Редактирвоание профиля</h1>
 	<div>
 		<form>
 			<label for="lname">Фамилия</label>
@@ -62,23 +58,8 @@
 				bind:value={last_name}
 			/>
 
-			<label for="fname">Имя</label>
-			<input type="text" id="fname" name="firstname" placeholder="Имя.." bind:value={first_name} />
-
-			<label for="patronymic">Отчество</label>
-			<input
-				type="text"
-				id="patronymic"
-				name="patronymic"
-				placeholder="Отчество.."
-				bind:value={patronymic}
-			/>
-
 			<label for="phone">Телефон</label>
 			<input type="tel" id="phone" name="phone" placeholder="Номер телефона.." bind:value={phone} />
-
-			<label for="birth-date">Дата рождения</label>
-			<input type="date" id="birth-date" name="birth-date" bind:value={birth_date} />
 
 			<label for="address">Адрес проживания</label>
 			<input
@@ -89,24 +70,17 @@
 				bind:value={address}
 			/>
 
-			<label for="status">Родство</label>
-			<select id="status" name="status" bind:value={status}>
-				<option value="Бабушка">Бабушка</option>
-				<option value="Дедушка">Дедушка</option>
-				<option value="Мать">Мать</option>
-				<option value="Отец">Отец</option>
-				<option value="Брат">Брат</option>
-				<option value="Сестра">Сестра</option>
-			</select>
-
 			<div class="submit">
-				<input type="button" value="Добавить родственника" on:click={create_relative} />
+				<input type="button" value="Сохранить изменения" on:click={save_changes} />
 			</div>
 		</form>
 	</div>
 </div>
 
 <style>
+	.container {
+		text-align: center;
+	}
 	.submit {
 		margin: 0;
 		padding: 0;
@@ -114,9 +88,7 @@
 	}
 
 	input[type='text'],
-	input[type='tel'],
-	input[type='date'],
-	select {
+	input[type='tel'] {
 		width: 100%;
 		padding: 12px 20px;
 		margin: 8px 0;

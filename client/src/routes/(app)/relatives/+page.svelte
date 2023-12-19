@@ -45,7 +45,13 @@
 						<td>{relative.abstract_profile.birth_date}</td>
 						<td>{relative.abstract_profile.address}</td>
 						<td>{relative.status.status_name}</td>
-						<td><button>редактировать</button></td>
+						<td
+							><button
+								on:click={() => {
+									goto(`/relatives/${relative.abstract_profile.id}`);
+								}}>редактировать</button
+							></td
+						>
 						<td
 							><button
 								on:click={() => {

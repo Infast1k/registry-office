@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .models import Relatives, AbstractProfile, RelativeStatus
 from users.models import User
-from .serializers import RelativeSerializer
+from .serializers import AbstractUserSerializer, RelativeSerializer
 
 
 class RelativesView(APIView):
@@ -46,6 +46,16 @@ class RelativesView(APIView):
 
 
 class RelativeDetailView(APIView):
+
+    def get(self, request, id):
+        """Метод для получения записи о родственнике по id"""
+        try:
+            relateve = AbstractProfile.objects.get(id=id)
+            relateve_clear = AbstractUserSerializer(relateve, many=False)
+            return Response(relateve_clear.data, status=status.HTTP_200_OK)
+        except Relatives.DoesNotExist:
+            return Response({"message": f"Профиля с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request, id):
         """Метод для удаления записи о родственнике текущего пользователя"""
         # Находим нужную запись по id
@@ -63,28 +73,11 @@ class RelativeDetailView(APIView):
         """Метод для обновления записи о родственнике текущего пользователя"""
         # Находим нужную запись по id
         try:
-            relative = Relatives.objects.get(id=id)
-            # Находим статус по имени
-            status_name = request.data.get("status_name")
-            relative_status = RelativeStatus.objects.get(status_name=status_name)
-            # Обновляем запись
-            # Второй параметр снова упускаем, т.к. с фронта нам будут приходить все поля.
-            relative.abstract_profile.last_name = request.data.get("last_name")
-            relative.abstract_profile.first_name = request.data.get("first_name")
-            relative.abstract_profile.patronymic = request.data.get("patronymic")
-            relative.abstract_profile.phone = request.data.get("phone")
-            relative.abstract_profile.birth_date = request.data.get("birth_date")
-            relative.abstract_profile.address = request.data.get("address")
-            relative.status = relative_status
-            # Сохраняем обновление абстрактного профиля
-            relative.abstract_profile.save()
-            # Сохраняем обновление статуса
+            relative = AbstractProfile.objects.get(id=id)
+            relative.last_name = request.data.get("last_name")
+            relative.phone = request.data.get("phone")
+            relative.address = request.data.get("address")
             relative.save()
-            # Возвращаем сообщение о том, что запись успешно обновлена + статус 200_OK
             return Response({"message": "запись была успешно обновлена"}, status=status.HTTP_200_OK)
-        except Relatives.DoesNotExist:
-            # Возвращаем сообщение о том, что записи с таким id не существет + статус 400_BAD_EEQUEST
-            return Response({"message": f"записи с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)
-        except RelativeStatus.DoesNotExist:
-            return Response({"message": f"статуса {request.data.get("status_name")} не существует"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        except AbstractProfile.DoesNotExist:
+            return Response({"message": f"Профиля с id {id} не существует"}, status=status.HTTP_400_BAD_REQUEST)

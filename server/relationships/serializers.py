@@ -5,7 +5,7 @@ from . import models
 class AbstractUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AbstractProfile
-        exclude = ('id',)
+        fields = '__all__'
 
 
 class StatusSerializer(serializers.ModelSerializer):
