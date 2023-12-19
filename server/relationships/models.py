@@ -37,5 +37,6 @@ class Relatives(models.Model):
         return f"{self.user} - {self.abstract_profile}"
 
     class Meta:
+        unique_together = ('user', 'abstract_profile', 'status')
         verbose_name = "relative"
         verbose_name_plural = "relitives"

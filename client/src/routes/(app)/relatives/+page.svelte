@@ -2,17 +2,20 @@
 	import { token } from '$lib/stores/userStore.js';
 	import { get } from 'svelte/store';
 
+	import { goto } from '$app/navigation';
+
 	export let data;
 	let relatives = data.relatives;
 
-	function example() {
+	function add_relative() {
 		// Срабатывает при добавлении нового родственника
+		goto('/relatives/create/');
 	}
 </script>
 
 <div class="container">
 	<h1>Родственники</h1>
-	<button on:click={example}>Добавить родственника</button>
+	<button on:click={add_relative}>Добавить родственника</button>
 	<div class="tbl-header">
 		<table cellpadding="0" cellspacing="0" border="0">
 			<thead>
@@ -46,12 +49,14 @@
 						<td
 							><button
 								on:click={() => {
+									// Делаем запрос на удаление
 									fetch(`http://localhost:8000/api/v1/relatives/${relative.id}/`, {
 										method: 'DELETE',
 										headers: {
 											Authorization: `Token ${get(token)}`
 										}
 									});
+									// Обновляем страницу
 									location.reload();
 								}}>удалить</button
 							></td

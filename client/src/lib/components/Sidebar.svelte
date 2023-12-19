@@ -40,7 +40,7 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="#!">
+					<a href="/relatives/">
 						<i class="bx bx-pie-chart-alt icon" />
 						<span class="text nav-text">Родственники</span>
 					</a>
