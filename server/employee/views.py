@@ -5,6 +5,7 @@ from rest_framework import status
 from wedding.models import Wedding, WeddingStatus
 from wedding.serializers import WeddingSerializer
 from users.models import User
+from django.db.models import Q
 
 class ListOfWeddingsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -15,12 +16,12 @@ class ListOfWeddingsView(APIView):
         if str(user.role) == "user":
             # Если он не работник/админ, возвращаем сообщение с ошибкой доступа.
             return Response({"error": "Пользователь не имеет доступа к данному функционалу!"}, status=status.HTTP_403_FORBIDDEN)
-        # Берем все записи из таблицы с договорами
-        all_weddings = Wedding.objects.all()
+        # Берем все из таблицы с договорами записи кроме "в браке" и "в разводе" 
+        weddings = Wedding.objects.exclude(Q(status=2) | Q(status=3))
         # Преобразуем python-dict данные в json формат
-        all_weddings_clear = WeddingSerializer(all_weddings, many=True)
+        weddings_clear = WeddingSerializer(weddings, many=True)
         # Возращаем данные + статус код 200 OK
-        return Response(all_weddings_clear.data, status=status.HTTP_200_OK)
+        return Response(weddings_clear.data, status=status.HTTP_200_OK)
 
 
 class WeddingDetailView(APIView):

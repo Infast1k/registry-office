@@ -46,15 +46,21 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="#!">
+					<a href="/employee/cotracts/">
 						<i class="bx bx-heart icon" />
-						<span class="text nav-text">Likes</span>
+						<span class="text nav-text">Упр. договорами</span>
 					</a>
 				</li>
 				<li class="nav-link">
 					<a href="admin/">
 						<i class="bx bx-wallet icon" />
 						<span class="text nav-text">Пользователи</span>
+					</a>
+				</li>
+				<li class="nav-link">
+					<a href="profile/">
+						<i class="bx bx-wallet icon" />
+						<span class="text nav-text">Личный кабинет</span>
 					</a>
 				</li>
 			</ul>
