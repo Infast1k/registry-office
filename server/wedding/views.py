@@ -25,7 +25,7 @@ class WeddingListView(APIView):
 
         married = len(Wedding.objects.filter(Q(user=user) | Q(profile=user.profile), status=2))
         if married == 1:
-            return Response({"message": "Невозможно создать договор, данный пользователь уже состоит в браке!"},
+            return Response({"error": "Невозможно создать договор, данный пользователь уже состоит в браке!"},
                             status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -107,6 +107,26 @@ class WeddingDetailView(APIView):
 
 
 class WitnessesView(APIView):
+    def get(self, request, id):
+        """Метод для получения списка свидетелей к определенной свадьбе (по id)"""
+        try:
+            wedding = Wedding.objects.get(id=id)
+            witnesses = Witnesses.objects.filter(wedding=wedding)
+            witnesses_clear = WitnessSerializer(witnesses, many=True)
+            return Response(witnesses_clear.data, status=status.HTTP_200_OK)
+        except Wedding.DoesNotExist:
+            return Response({"error": f"Свадьбы с id {id} не существует!"})
+    
+    def delete(self, request, id):
+        """Метод для удаления свидетeля"""
+        try:
+            witness = Witnesses.objects.get(id=id)
+            witness.delete()
+            return Response({"message": "свидетель успешно удален!"}, status=status.HTTP_200_OK)
+        except Witnesses.DoesNotExist:
+            return Response({"error": f"Свидетеля с id {id} не существует!"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
     def post(self, request, id):
         """Метод для добавления свидетелей к определенной свадьбе (по id)"""
         try:

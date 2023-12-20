@@ -52,7 +52,7 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="admin/">
+					<a href="/admin/">
 						<i class="bx bx-wallet icon" />
 						<span class="text nav-text">Пользователи</span>
 					</a>
@@ -69,7 +69,7 @@
 			<li class="">
 				<a href="#!">
 					<i class="bx bx-log-out icon" />
-					<span class="text nav-text">Logout</span>
+					<span class="text nav-text">Выйти</span>
 				</a>
 			</li>
 		</div>

@@ -1,10 +1,18 @@
 <script>
+	import { goto } from '$app/navigation';
+
 	export let data;
 	let contracts = data.contracts;
+
+	function add_contract() {
+		// Срабатывает при нажатии на кнопку "Создать договор"
+		goto('/my-contracts/create/');
+	}
 </script>
 
 <div class="container">
 	<h1>Мои договоры</h1>
+	<button on:click={add_contract}>Создать договор</button>
 	<div class="tbl-header">
 		<table cellpadding="0" cellspacing="0" border="0">
 			<thead>
@@ -13,6 +21,7 @@
 					<th>ФИО</th>
 					<th>Дата проведения</th>
 					<th>Статус</th>
+					<th />
 				</tr>
 			</thead>
 		</table>
@@ -34,6 +43,13 @@
 						>
 						<td>{contract.event_datetime}</td>
 						<td>{contract.status.status_name}</td>
+						<td
+							><button
+								on:click={() => {
+									goto(`/my-contracts/${contract.id}`);
+								}}>Подробнее</button
+							></td
+						>
 					</tr>
 				{/each}
 			</tbody>
