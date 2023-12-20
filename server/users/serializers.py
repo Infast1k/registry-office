@@ -34,4 +34,4 @@ class UserSerializer(serializers.ModelSerializer):
     role = RoleSerializer(many=False, read_only=True)
     class Meta:
         model = models.User
-        fields = ('email', 'profile', 'role')
+        fields = ('id', 'email', 'profile', 'role')

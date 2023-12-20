@@ -1,4 +1,6 @@
 <script>
+	import { goto } from '$app/navigation';
+
 	export let data;
 	let users = data.users;
 </script>
@@ -13,8 +15,7 @@
 					<th>Телефон</th>
 					<th>Дата рождения</th>
 					<th>Адрес</th>
-					<th>Статус</th>
-					<th />
+					<th>Роль</th>
 					<th />
 				</tr>
 			</thead>
@@ -34,8 +35,13 @@
 						<td>{user.profile.birth_date}</td>
 						<td>{user.profile.address}</td>
 						<td>{user.role.role_name}</td>
-						<td><button on:click={() => {}}>редактировать</button></td>
-						<td><button on:click={() => {}}>удалить</button></td>
+						<td
+							><button
+								on:click={() => {
+									goto(`/admin/${user.id}`);
+								}}>Подробнее</button
+							></td
+						>
 					</tr>
 				{/each}
 			</tbody>

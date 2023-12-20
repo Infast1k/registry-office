@@ -28,6 +28,16 @@ class UsersView(APIView):
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated, ]
 
+    def get(self, request, id):
+        """Метод для получения данных о пользователе по id"""
+        try:
+            user = User.objects.get(id=id)
+            user_clear = UserSerializer(user, many=False)
+            return Response(user_clear.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"message": f"Пользователя с id {id} не существует!"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
     def put(self, request, id):
         """Метод обновляет роль пользователя"""
         # Берем текущего пользователя
