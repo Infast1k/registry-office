@@ -14,19 +14,12 @@ class PassportSerializer(serializers.ModelSerializer):
         fields = ('numbers', 'series', 'registration_place', 'created_at')
 
 
-class BirthSertificateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.BirthSertificate
-        fields = ('registration_place', 'place_of_birth', 'vital_record')
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     passport = PassportSerializer(many=False, read_only=True)
-    birth_sertificate = BirthSertificateSerializer(many=False, read_only=True)
     class Meta:
         model = models.Profile
         fields = ('last_name', 'first_name', 'patronymic', 'sex', 'birth_date',
-                  'phone', 'passport', 'birth_sertificate', 'address', 'image')
+                  'phone', 'passport', 'address', 'image')
 
 
 class UserSerializer(serializers.ModelSerializer):

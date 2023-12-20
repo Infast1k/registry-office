@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Wedding, WeddingStatus, Witnesses
+from .models import Wedding, WeddingStatus, Witnesses, Children, Child, BirthSertificate, ChildStatus
 from users.serializers import UserSerializer, ProfileSerializer
 from relationships.serializers import AbstractUserSerializer
 
@@ -27,3 +27,29 @@ class WitnessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Witnesses
         fields = ("id", "wedding", "witness",)
+
+
+class BirthSertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BirthSertificate
+        fields = "__all__"
+
+class ChildSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = "__all__"
+
+class ChildStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChildStatus
+        fields = "__all__"
+
+
+class ChildrenSerializer(serializers.ModelSerializer):
+    child = ChildSerializer(many=False, read_only=True)
+    birth_sertificate = BirthSertificateSerializer(many=False, read_only=True)
+    status = ChildStatusSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Children
+        fields = "__all__"

@@ -17,9 +17,17 @@ export async function load({ params }) {
     });
     let witnesses = await witnesses_response.json();
 
+    let children_response = await fetch(`http://localhost:8000/api/v1/weddings/children/${params.id}/`, {
+        headers: {
+            Authorization: `Token ${get(token)}`
+        }
+    });
+    let children = await children_response.json();
+
     return {
         contract: contract,
         witnesses: witnesses,
+        children: children,
         slug: params.id
     };
 }

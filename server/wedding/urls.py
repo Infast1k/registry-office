@@ -3,7 +3,9 @@ from .views import (
     WeddingListView,
     CurrentUserWeddingView,
     WeddingDetailView,
-    WitnessesView
+    WitnessesView,
+    ChildrenView,
+    ChildDetail
     )
 
 urlpatterns = [
@@ -11,4 +13,6 @@ urlpatterns = [
     path("my-weddings/", CurrentUserWeddingView.as_view()),
     path("weddings/<int:id>/", WeddingDetailView.as_view()),
     path("weddings/witnesses/<int:id>/", WitnessesView.as_view()),
+    path("weddings/children/<int:id>/", ChildrenView.as_view()),
+    path("wedding/child/<int:id>/", ChildDetail.as_view()),
 ]

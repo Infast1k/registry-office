@@ -6,8 +6,8 @@ from django.db.models import Q
 from wedding.exceptions import SameSexException
 
 from wedding.serializers import WeddingSerializer
-from .serializers import WitnessSerializer
-from .models import Wedding, Witnesses
+from .serializers import ChildrenSerializer, WitnessSerializer
+from .models import Wedding, Witnesses, Children, Child, BirthSertificate, ChildStatus
 from users.models import Profile, Passport, User
 from relationships.models import AbstractProfile
 
@@ -162,3 +162,79 @@ class WitnessesView(APIView):
         except IntegrityError as e:
             return Response({"error": "Данный человек уже является свидетелем для данной свадьбы"},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChildrenView(APIView):
+    def get(self, request, id):
+        """Метод для получения списка всех детей свадьбы по id"""
+        try:
+            wedding = Wedding.objects.get(id=id)
+            children = Children.objects.filter(wedding=wedding)
+            children_clear = ChildrenSerializer(children, many=True)
+            return Response(children_clear.data, status=status.HTTP_200_OK)
+        except Wedding.DoesNotExist:
+            return Response({"error": f"Свадьбы с id {id} не существует!"}, 
+                            status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, requset, id):
+        """Метод для добавления ребенка по id свадьбы"""
+        try:
+            wedding = Wedding.objects.get(id=id)
+            child = Child.objects.get(
+                last_name=requset.data.get("last_name"),
+                first_name=requset.data.get("first_name"),
+                patronymic=requset.data.get("patronymic"),
+                sex=requset.data.get("sex"),
+                birth_date=requset.data.get("birth_date")
+            )    
+        except Child.DoesNotExist:
+            child = Child.objects.create(
+                last_name=requset.data.get("last_name"),
+                first_name=requset.data.get("first_name"),
+                patronymic=requset.data.get("patronymic"),
+                sex=requset.data.get("sex"),
+                birth_date=requset.data.get("birth_date")
+            )
+        except Wedding.DoesNotExist:
+            return Response({"error": f"Свадьбы с id {id} не существует!"})
+        
+        try:
+            birth_sertificate = BirthSertificate.objects.get(
+                place_of_birth = requset.data.get("place_of_birth"),
+                vital_record = requset.data.get("vital_record")
+            )
+        except BirthSertificate.DoesNotExist:
+            birth_sertificate = BirthSertificate.objects.create(
+                place_of_birth = requset.data.get("place_of_birth"),
+                vital_record = requset.data.get("vital_record")
+            )
+        
+        status_name = ChildStatus.objects.get(status_name = requset.data.get("status"))
+        Children.objects.create(
+            child=child,
+            wedding=wedding,
+            birth_sertificate=birth_sertificate,
+            address=requset.data.get("address"),
+            status=status_name
+        )
+        return Response({"message": "Ребенок успешно добавлен!"}, status=status.HTTP_200_OK)
+        
+
+    def delete(self, request, id):
+        """Метод для удаления записи из таблицы children по id"""
+        try:
+            child = Children.objects.get(id=id)
+            child.delete()
+            return Response({"message": f"Запись с id {id} успешно удалена!"})
+        except Children.DoesNotExist:
+            return Response({"error": f"Записи с id {id} не существует!"})
+
+
+class ChildDetail(APIView):
+    def get(self, request, id):
+        try:
+            child = Children.objects.get(id=id)
+            child_clear = ChildrenSerializer(child, many=False)
+            return Response(child_clear.data, status=status.HTTP_200_OK)
+        except Children.DoesNotExist:
+            return Response({"error": f"Ребенка с id {id} не существет!"})

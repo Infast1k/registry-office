@@ -8,6 +8,7 @@
 	export let data;
 	let contract = data.contract;
 	let witnesses = data.witnesses;
+	let children = data.children;
 </script>
 
 <h3>
@@ -49,6 +50,11 @@
 <h3>Адрес проживания: {contract.profile.address}</h3>
 
 <h1>Свидетили</h1>
+<button
+	on:click={() => {
+		goto(`/my-contracts/create-witness/${data.slug}/`);
+	}}>Добавить свидетеля</button
+>
 <div class="tbl-header">
 	<table cellpadding="0" cellspacing="0" border="0">
 		<thead>
@@ -101,13 +107,71 @@
 		</tbody>
 	</table>
 </div>
-<button
-	on:click={() => {
-		goto(`/my-contracts/create-witness/${data.slug}/`);
-	}}>Добавить свидетеля</button
->
 
 <h1>Дети</h1>
+<button
+	on:click={() => {
+		goto(`/my-contracts/create-child/${data.slug}/`);
+	}}>Добавить ребенка</button
+>
+<div class="tbl-header">
+	<table cellpadding="0" cellspacing="0" border="0">
+		<thead>
+			<tr>
+				<th>ФИО</th>
+				<th>Дата рождения</th>
+				<th>Место рождения</th>
+				<th>Адрес</th>
+				<th />
+				<th />
+			</tr>
+		</thead>
+	</table>
+</div>
+<div class="tbl-content">
+	<table cellpadding="0" cellspacing="0" border="0">
+		<tbody>
+			{#each children as child (child.id)}
+				<tr>
+					<td
+						>{child.child.last_name}
+						{child.child.first_name}
+						{child.child.patronymic}</td
+					>
+					<td>{child.child.birth_date}</td>
+					<td>{child.birth_sertificate.place_of_birth}</td>
+					<td>{child.address}</td>
+					<td
+						><button
+							on:click={() => {
+								goto(`/my-contracts/children/${child.id}/`);
+							}}>Редактировать</button
+						></td
+					>
+					<td
+						><button
+							on:click={() => {
+								axios
+									.delete(`http://localhost:8000/api/v1/weddings/children/${child.id}/`, {
+										headers: {
+											Authorization: `Token ${get(token)}`
+										}
+									})
+									.then((res) => {})
+									.catch((errors) => {
+										alert(errors.response.data.error);
+										console.log(errors);
+									});
+								// Обновляем страницу
+								location.reload();
+							}}>Удалить</button
+						></td
+					>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style>
 	h1 {
