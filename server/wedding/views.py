@@ -116,7 +116,7 @@ class WitnessesView(APIView):
             return Response(witnesses_clear.data, status=status.HTTP_200_OK)
         except Wedding.DoesNotExist:
             return Response({"error": f"Свадьбы с id {id} не существует!"})
-    
+        
     def delete(self, request, id):
         """Метод для удаления свидетeля"""
         try:
@@ -149,12 +149,16 @@ class WitnessesView(APIView):
         except Wedding.DoesNotExist:
             # Возвращаем информативное сообщение + статус 400 bad request
             return Response({"error": f"Свадьбы с id {id} не существует!"}, status=status.HTTP_400_BAD_REQUEST)
-        # Создаем запись в таблицу со свидетелями
-        witness = Witnesses.objects.create(
-            wedding = wedding,
-            witness = abstract_profile
-        ) 
-        # Преобразуем данные из Python-dict в json
-        witness_clear = WitnessSerializer(witness, many=False)
-        # Возвращаем созданную запись + статус 200 ok
-        return Response(witness_clear.data, status=status.HTTP_200_OK)
+        try:
+            # Создаем запись в таблицу со свидетелями
+            witness = Witnesses.objects.create(
+                wedding = wedding,
+                witness = abstract_profile
+            ) 
+            # Преобразуем данные из Python-dict в json
+            witness_clear = WitnessSerializer(witness, many=False)
+            # Возвращаем созданную запись + статус 200 ok
+            return Response(witness_clear.data, status=status.HTTP_200_OK)
+        except IntegrityError as e:
+            return Response({"error": "Данный человек уже является свидетелем для данной свадьбы"},
+                            status=status.HTTP_400_BAD_REQUEST)

@@ -38,5 +38,6 @@ class Witnesses(models.Model):
         return f"{self.wedding.id}. {self.witness.last_name} {self.witness.first_name} {self.witness.patronymic}"
 
     class Meta:
+        unique_together = ['wedding', 'witness']
         verbose_name = "witness"
         verbose_name_plural = "witnesses"

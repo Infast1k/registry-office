@@ -58,7 +58,6 @@
 				<th>Дата рождения</th>
 				<th>Адрес</th>
 				<th />
-				<th />
 			</tr>
 		</thead>
 	</table>
@@ -76,7 +75,6 @@
 					<td>{witness.witness.phone}</td>
 					<td>{witness.witness.birth_date}</td>
 					<td>{witness.witness.address}</td>
-					<td><button>редактировать</button></td>
 					<td
 						><button
 							on:click={() => {
@@ -105,7 +103,7 @@
 </div>
 <button
 	on:click={() => {
-		goto(`/my-contacts/create-witness/`);
+		goto(`/my-contracts/create-witness/${data.slug}/`);
 	}}>Добавить свидетеля</button
 >
 
