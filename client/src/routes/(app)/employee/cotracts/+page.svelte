@@ -1,4 +1,9 @@
 <script>
+	import axios from 'axios';
+	import { token } from '$lib/stores/userStore.js';
+	import { get } from 'svelte/store';
+	import { goto } from '$app/navigation';
+
 	export let data;
 	let contracts = data.contracts;
 </script>
@@ -13,6 +18,7 @@
 					<th>ФИО</th>
 					<th>Дата проведения</th>
 					<th>Статус</th>
+					<th />
 				</tr>
 			</thead>
 		</table>
@@ -34,6 +40,13 @@
 						>
 						<td>{contract.event_datetime}</td>
 						<td>{contract.status.status_name}</td>
+						<td
+							><button
+								on:click={() => {
+									goto(`/employee/contracts/${contract.id}/`);
+								}}>Обновить статус</button
+							></td
+						>
 					</tr>
 				{/each}
 			</tbody>
