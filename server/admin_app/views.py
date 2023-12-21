@@ -69,5 +69,5 @@ class UserDetailView(APIView):
         # Если роли с таким названием не сущесвтует
         except Role.DoesNotExist:
             # Возвращаем информационное сообщение + статус 400 bad request
-            return Response({"error": f"роли {request.data.get("role")} не существует!"},
+            return Response({"error": f"роли {request.data.get('role')} не существует!"},
                             status=status.HTTP_400_BAD_REQUEST) 

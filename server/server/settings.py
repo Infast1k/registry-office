@@ -85,18 +85,16 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': "django.db.backends.postgresql_psycopg2",
+        'ENGINE': "django.db.backends.mysql",
         'NAME': "registry_office",
-        'USER': "postgres",
-        'PASSWORD': "Nas-10122003",
+        'USER': "root",
+        'PASSWORD': "1234567QwErTy7654321",
         'HOST': "localhost",
-        # 'PORT': "3306"
-        'PORT': "5432",
+        'PORT': "3306",
 
-
-        # 'OPTIONS': {
-        #     'init_command': 'SET foreign_key_checks = 0;',
-        # },
+        'OPTIONS': {
+            'init_command': 'SET foreign_key_checks = 0;',
+        },
     }
 }
 

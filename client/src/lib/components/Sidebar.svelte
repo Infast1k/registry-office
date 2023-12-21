@@ -58,7 +58,7 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="profile/">
+					<a href="/profile/">
 						<i class="bx bx-wallet icon" />
 						<span class="text nav-text">Личный кабинет</span>
 					</a>
