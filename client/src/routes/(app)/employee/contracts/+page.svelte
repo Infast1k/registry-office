@@ -44,7 +44,7 @@
 							><button
 								on:click={() => {
 									goto(`/employee/contracts/${contract.id}/`);
-								}}>Обновить статус</button
+								}}>Подробнее</button
 							></td
 						>
 					</tr>
@@ -65,34 +65,58 @@
 	}
 	table {
 		margin: 0 auto;
-		width: 50%;
+		width: 90%;
 		table-layout: fixed;
 	}
 	.tbl-header {
 		background-color: rgba(255, 255, 255, 0.3);
 	}
 	.tbl-content {
-		height: 300px;
+		height: 400px;
 		overflow-x: auto;
 		margin-top: 0px;
 		border: 1px solid rgba(255, 255, 255, 0.3);
 	}
 	th {
 		padding: 20px 15px;
-		text-align: left;
+		text-align: center;
 		font-weight: 500;
 		font-size: 14px;
 		color: black;
 		text-transform: uppercase;
 	}
+
+	button {
+		background-color: var(--primary-color);
+		color: white;
+		padding: 1px 2px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
 	td {
 		padding: 15px;
-		text-align: left;
+		text-align: center;
 		vertical-align: middle;
 		font-weight: 300;
 		font-size: 12px;
 		color: black;
 		border-bottom: solid 1px rgba(255, 255, 255, 0.1);
+	}
+	input[type='button'] {
+		width: 20%;
+		background-color: #4caf50;
+		color: white;
+		padding: 14px 20px;
+		margin: 8px 0;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	input[type='button']:hover {
+		background-color: #45a049;
 	}
 
 	/* скролл бар */

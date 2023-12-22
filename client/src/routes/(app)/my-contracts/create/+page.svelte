@@ -99,7 +99,7 @@
 </script>
 
 <div class="container">
-	<div>
+	<div class="form-container">
 		<form>
 			<label for="lname">Фамилия</label>
 			<input
@@ -129,16 +129,29 @@
 			<input type="date" id="birth-date" name="birth-date" bind:value={birth_date} />
 
 			<label for="series">Серия паспорта</label>
-			<input type="text" id="series" name="series" bind:value={series} />
+			<input
+				type="text"
+				id="series"
+				name="series"
+				placeholder="Серия паспорта.."
+				bind:value={series}
+			/>
 
 			<label for="number">Номер паспорта</label>
-			<input type="text" id="number" name="number" bind:value={number} />
+			<input
+				type="text"
+				id="number"
+				name="number"
+				placeholder="Номер паспорта.."
+				bind:value={number}
+			/>
 
 			<label for="registration_place">Паспорт выдан</label>
 			<input
 				type="text"
 				id="registration_place"
 				name="registration_place"
+				placeholder="Паспорт выдан.."
 				bind:value={registration_place}
 			/>
 
@@ -160,9 +173,6 @@
 				<option value="женщина">Женщина</option>
 			</select>
 
-			<label for="change_sex">Сменить фамилию партнерше</label>
-			<input type="checkbox" name="change_sex" id="change_sex" bind:checked={change_sex} />
-
 			<br />
 
 			<label for="event_datetime">Время проведения мероприятия</label>
@@ -175,6 +185,9 @@
 				bind:value={event_datetime}
 			/>
 
+			<label for="change_sex">Сменить фамилию партнерше</label>
+			<input type="checkbox" name="change_sex" id="change_sex" bind:checked={change_sex} />
+
 			<div class="submit">
 				<input type="button" value="Создать договор" on:click={create_contract} />
 			</div>
@@ -183,15 +196,19 @@
 </div>
 
 <style>
-	.submit {
-		margin: 0;
-		padding: 0;
+	* {
+		background: var(--body-color);
+	}
+	.form-container {
+		width: 60%;
+		margin: 0 auto;
 		text-align: center;
 	}
 
 	input[type='text'],
 	input[type='tel'],
 	input[type='date'],
+	input[type='datetime-local'],
 	select {
 		width: 100%;
 		padding: 12px 20px;

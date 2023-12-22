@@ -27,7 +27,7 @@ class ListOfWeddingsView(APIView):
 class WeddingDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, id):
+    def put(self, request, id):
         # Берем из бд пользователя который сделал запрос.
         user = User.objects.get(id=request.user.id) 
         # Проверяем роль пользователя.
@@ -38,7 +38,7 @@ class WeddingDetailView(APIView):
             # Берем запись по id (который отправлен с фронта)
             wedding = Wedding.objects.get(id=id)
             # Берем новый статус из запроса
-            req_status = request.data.get("status", wedding.status)
+            req_status = request.data.get("status")
             # ищем instance статуса и берем её (если есть, если нет, то возвращаем ошибку)
             new_status = WeddingStatus.objects.get(status_name=req_status)
             # Изменяем статус этой записи
@@ -57,4 +57,4 @@ class WeddingDetailView(APIView):
         except WeddingStatus.DoesNotExist:
             # Возвращаем сообщение с ошибкой 
             status_name = request.data.get("status")
-            return Response({"error": f"Статуса '{status_name}' не существует!"})
+            return Response({"error": f"Статуса '{status_name}' не существует!"}, status=status.HTTP_400_BAD_REQUEST)

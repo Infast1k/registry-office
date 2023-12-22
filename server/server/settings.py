@@ -85,6 +85,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 DATABASES = {
     'default': {
+<<<<<<< HEAD
         'ENGINE': "django.db.backends.mysql",
         'NAME': "registry_office",
         'USER': "root",
@@ -95,6 +96,25 @@ DATABASES = {
         'OPTIONS': {
             'init_command': 'SET foreign_key_checks = 0;',
         },
+=======
+        # 'ENGINE': "django.db.backends.postgresql_psycopg2",
+        # 'NAME': "registry_office",
+        # 'USER': "postgres",
+        # 'PASSWORD': "Nas-10122003",
+        # 'HOST': "localhost",
+        # 'PORT': "5432",
+
+        'ENGINE': "django.db.backends.mysql",
+            'NAME': "registry_office",
+            'USER': "root",
+            'PASSWORD': "1234567QwErTy7654321",
+            'HOST': "localhost",
+            'PORT': "3306",
+
+            'OPTIONS': {
+                'init_command': 'SET foreign_key_checks = 0;',
+            },
+>>>>>>> 712ddd221260212a523bad3c5360974a8499527d
     }
 }
 
@@ -104,6 +124,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
+    'DATETIME_FORMAT': r"%d-%m-%Y %H:%M",
 }
 
 
@@ -132,7 +153,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     'http://localhost:5173',
 #     'http://127.0.0.1:5173',
 # ]
-
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
