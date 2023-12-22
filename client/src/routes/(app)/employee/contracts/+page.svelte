@@ -44,7 +44,7 @@
 							><button
 								on:click={() => {
 									goto(`/employee/contracts/${contract.id}/`);
-								}}>Обновить статус</button
+								}}>Подробнее</button
 							></td
 						>
 					</tr>

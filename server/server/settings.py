@@ -134,7 +134,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     'http://localhost:5173',
 #     'http://127.0.0.1:5173',
 # ]
-
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

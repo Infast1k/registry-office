@@ -46,7 +46,7 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="/employee/cotracts/">
+					<a href="/employee/contracts/">
 						<i class="bx bx-heart icon" />
 						<span class="text nav-text">Упр. договорами</span>
 					</a>
