@@ -1,4 +1,4 @@
 import { writable } from 'svelte/store'
 
-export const token = writable("54d4680ea062a2f2aa2f8430963dc9e10942d135");
+export const token = writable("f344a2c46fbc7be3049069ee1f10e5dd0a2ce396");
 export const role = writable("admin");

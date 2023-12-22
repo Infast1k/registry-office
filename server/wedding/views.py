@@ -232,6 +232,7 @@ class ChildrenView(APIView):
 
 class ChildDetail(APIView):
     def get(self, request, id):
+        """Получение ребенка по его id"""
         try:
             child = Children.objects.get(id=id)
             child_clear = ChildrenSerializer(child, many=False)

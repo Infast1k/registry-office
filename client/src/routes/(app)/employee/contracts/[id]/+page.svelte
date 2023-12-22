@@ -40,53 +40,56 @@
 	}
 </script>
 
-<h3>
-	{#if contract.user.profile.sex == 'мужчина'}
-		ФИО мужа:
-	{:else}
-		ФИО жены:
-	{/if}
-	{contract.user.profile.last_name}
-	{contract.user.profile.first_name}
-	{contract.user.profile.patronymic}
-</h3>
-
-<h3>Телефон: {contract.user.profile.phone}</h3>
-<h3>Дата рождения: {contract.user.profile.birth_date}</h3>
-<h3>
-	Серия - номер паспорта: {contract.user.profile.passport.series} - {contract.user.profile.passport
-		.numbers}
-</h3>
-<h3>Адрес проживания: {contract.user.profile.address}</h3>
-
-<br />
-
-<h3>
-	{#if contract.profile.sex == 'мужчина'}
-		ФИО мужа:
-	{:else}
-		ФИО жены:
-	{/if}
-	{contract.profile.last_name}
-	{contract.profile.first_name}
-	{contract.profile.patronymic}
-</h3>
-<h3>Телефон: {contract.profile.phone}</h3>
-<h3>Дата рождения: {contract.profile.birth_date}</h3>
-<h3>
-	Серия - номер паспорта: {contract.profile.passport.series} - {contract.profile.passport.numbers}
-</h3>
-<h3>Адрес проживания: {contract.profile.address}</h3>
-
-<h3>Статус договора: {contract.status.status_name}</h3>
-
+<h1>Молодожены</h1>
+<div class="tbl-header">
+	<table cellpadding="0" cellspacing="0" border="0">
+		<thead>
+			<tr>
+				<th>ФИО</th>
+				<th>Телефон</th>
+				<th>Дата рождения</th>
+				<th>Серия номер паспорта</th>
+				<th>Адрес</th>
+				<th>Статус договора</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+<div class="tbl-content">
+	<table cellpadding="0" cellspacing="0" border="0">
+		<tbody>
+			<tr>
+				<td
+					>{contract.profile.last_name}
+					{contract.profile.first_name}
+					{contract.profile.patronymic}</td
+				>
+				<td>{contract.profile.phone}</td>
+				<td>{contract.profile.birth_date}</td>
+				<td>{contract.profile.passport.series}-{contract.profile.passport.numbers}</td>
+				<td>{contract.profile.address}</td>
+			</tr>
+			<tr>
+				<td
+					>{contract.user.profile.last_name}
+					{contract.user.profile.first_name}
+					{contract.user.profile.patronymic}</td
+				>
+				<td>{contract.user.profile.phone}</td>
+				<td>{contract.user.profile.birth_date}</td>
+				<td>{contract.user.profile.passport.series}-{contract.profile.passport.numbers}</td>
+				<td>{contract.user.profile.address}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 <form action="">
 	<select id="status" name="status" bind:value={contract_status}>
 		<option value="На рассмотрении">На рассмотрении</option>
 		<option value="В браке">В браке</option>
 		<option value="В разводе">В разводе</option>
 		<option value="Одобрен">Одобрен</option>
-		<option value="На рассмотрении на развод">На рассмотрении на развод</option>
+		<option value="В рассмотрении на развод">В рассмотрении на развод</option>
 	</select>
 
 	<div class="submit">
@@ -159,6 +162,18 @@
 </div>
 
 <style>
+	* {
+		background: var(--body-color);
+	}
+	select {
+		width: 20%;
+		padding: 12px 20px;
+		margin: 8px 0;
+		display: inline-block;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-sizing: border-box;
+	}
 	select {
 		width: 20%;
 		padding: 12px 20px;

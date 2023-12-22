@@ -123,7 +123,6 @@
 				<th>Место рождения</th>
 				<th>Адрес</th>
 				<th />
-				<th />
 			</tr>
 		</thead>
 	</table>
@@ -141,13 +140,6 @@
 					<td>{child.child.birth_date}</td>
 					<td>{child.birth_sertificate.place_of_birth}</td>
 					<td>{child.address}</td>
-					<td
-						><button
-							on:click={() => {
-								goto(`/my-contracts/children/${child.id}/`);
-							}}>Редактировать</button
-						></td
-					>
 					<td
 						><button
 							on:click={() => {

@@ -47,7 +47,7 @@
 
 <div class="container">
 	<h1>Редактирвоание профиля</h1>
-	<div>
+	<div class="form-container">
 		<form>
 			<label for="lname">Фамилия</label>
 			<input
@@ -78,12 +78,15 @@
 </div>
 
 <style>
-	.container {
+	* {
+		background: var(--body-color);
+	}
+	h1 {
 		text-align: center;
 	}
-	.submit {
-		margin: 0;
-		padding: 0;
+	.form-container {
+		width: 80%;
+		margin: 0 auto;
 		text-align: center;
 	}
 

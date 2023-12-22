@@ -62,6 +62,10 @@
 </div>
 
 <style>
+	button {
+		cursor: pointer;
+	}
+
 	.buttons select {
 		margin-bottom: 7px;
 		padding: 3px 33px;
@@ -123,5 +127,16 @@
 		margin-top: 60px;
 		background-color: transparent;
 		color: #02899c;
+		cursor: pointer;
+	}
+	button.primary.ghost:hover {
+		background-color: #03bfcb;
+		border: 1px solid #03bfcb;
+		border-radius: 3px;
+		color: #231e39;
+		font-family: Montserrat, sans-serif;
+		font-weight: 500;
+		padding: 10px 25px;
+		cursor: pointer;
 	}
 </style>

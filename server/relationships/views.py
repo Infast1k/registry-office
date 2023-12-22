@@ -26,7 +26,7 @@ class RelativesView(APIView):
             relative_status = RelativeStatus.objects.get(status_name=request.data.get("status_name"))
             profile = AbstractProfile.objects.get(phone=request.data.get("phone"))
         except RelativeStatus.DoesNotExist:
-            return Response({"message": f"Статуса {request.data.get("status_name")} не сущестует"},
+            return Response({"message": f"Статуса {request.data.get('status_name')} не сущестует"},
                             status=status.HTTP_400_BAD_REQUEST)
         except AbstractProfile.DoesNotExist:
             profile = AbstractProfile.objects.create(

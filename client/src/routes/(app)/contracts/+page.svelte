@@ -1,6 +1,8 @@
 <script>
 	export let data;
 	let contracts = data.contracts;
+	// let date = contracts.event_datetime.split('T')[0];
+	// contract.event_datetime
 </script>
 
 <div class="container">

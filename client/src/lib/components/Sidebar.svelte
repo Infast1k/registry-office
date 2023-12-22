@@ -1,4 +1,9 @@
 <script>
+	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
+	import axios from 'axios';
+	import { token, role } from '$lib/stores/userStore.js';
+
 	import '../../app.css';
 	import logo from '$lib/images/svelte-logo.svg';
 </script>
@@ -12,8 +17,8 @@
 				</span>
 
 				<div class="text header-text">
-					<span class="name">CodingLab</span>
-					<span class="profession">Web developer</span>
+					<span class="name">Registry Office</span>
+					<span class="profession">Создай семью с нами</span>
 				</div>
 			</div>
 		</a>
@@ -28,51 +33,95 @@
 					</a>
 				</li>
 				<li class="nav-link">
-					<a href="/contracts/">
+					<a
+						href="/contracts/"
+						on:click={() => {
+							goto('/my-contracts/');
+						}}
+					>
 						<i class="bx bx-bar-chart-alt-2 icon" />
 						<span class="text nav-text">Все договоры</span>
 					</a>
 				</li>
-				<li class="nav-link">
-					<a href="/my-contracts/">
-						<i class="bx bx-bell icon" />
-						<span class="text nav-text">Мои договоры</span>
-					</a>
-				</li>
-				<li class="nav-link">
-					<a href="/relatives/">
-						<i class="bx bx-pie-chart-alt icon" />
-						<span class="text nav-text">Родственники</span>
-					</a>
-				</li>
-				<li class="nav-link">
-					<a href="/employee/contracts/">
-						<i class="bx bx-heart icon" />
-						<span class="text nav-text">Упр. договорами</span>
-					</a>
-				</li>
-				<li class="nav-link">
-					<a href="/admin/">
-						<i class="bx bx-wallet icon" />
-						<span class="text nav-text">Пользователи</span>
-					</a>
-				</li>
-				<li class="nav-link">
-					<a href="profile/">
-						<i class="bx bx-wallet icon" />
-						<span class="text nav-text">Личный кабинет</span>
-					</a>
-				</li>
+				{#if $role === 'user' || $role === 'employee' || $role === 'admin'}
+					<li class="nav-link">
+						<a href="/my-contracts/">
+							<i class="bx bx-bell icon" />
+							<span class="text nav-text">Мои договоры</span>
+						</a>
+					</li>
+					<li class="nav-link">
+						<a href="/relatives/">
+							<i class="bx bx-pie-chart-alt icon" />
+							<span class="text nav-text">Родственники</span>
+						</a>
+					</li>
+				{/if}
+				{#if $role === 'employee' || $role === 'admin'}
+					<li class="nav-link">
+						<a href="/employee/contracts/">
+							<i class="bx bx-heart icon" />
+							<span class="text nav-text">Упр. договорами</span>
+						</a>
+					</li>
+				{/if}
+				{#if $role === 'admin'}
+					<li class="nav-link">
+						<a href="/admin/">
+							<i class="bx bx-wallet icon" />
+							<span class="text nav-text">Пользователи</span>
+						</a>
+					</li>
+				{/if}
+				{#if $token}
+					<li class="nav-link">
+						<a href="/profile/">
+							<i class="bx bx-wallet icon" />
+							<span class="text nav-text">Личный кабинет</span>
+						</a>
+					</li>
+				{/if}
 			</ul>
 		</div>
-		<div class="bottom-content">
-			<li class="">
-				<a href="#!">
-					<i class="bx bx-log-out icon" />
-					<span class="text nav-text">Выйти</span>
-				</a>
-			</li>
-		</div>
+		{#if $token}
+			<div class="bottom-content">
+				<li class="">
+					<a
+						href="#!"
+						on:click={() => {
+							const empty = ' ';
+							axios
+								.post('http://localhost:8000/api/v1/auth/token/logout/', empty, {
+									headers: {
+										Authorization: `Token ${get(token)}`
+									}
+								})
+								.then((response) => {
+									// Удаление токена
+									token.set('');
+									role.set('');
+									goto('/');
+								})
+								.catch((errors) => {
+									console.log(errors);
+								});
+						}}
+					>
+						<i class="bx bx-log-out icon" />
+						<span class="text nav-text">Выйти</span>
+					</a>
+				</li>
+			</div>
+		{:else}
+			<div class="bottom-content">
+				<li class="">
+					<a href="/login">
+						<i class="bx bx-log-out icon" />
+						<span class="text nav-text">Войти</span>
+					</a>
+				</li>
+			</div>
+		{/if}
 	</div>
 </nav>
 

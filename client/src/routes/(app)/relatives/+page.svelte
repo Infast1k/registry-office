@@ -15,7 +15,9 @@
 
 <div class="container">
 	<h1>Родственники</h1>
-	<button on:click={add_relative}>Добавить родственника</button>
+	<div class="submit">
+		<input type="button" value="Добавить родственника" on:click={add_relative} />
+	</div>
 	<div class="tbl-header">
 		<table cellpadding="0" cellspacing="0" border="0">
 			<thead>
@@ -47,6 +49,7 @@
 						<td>{relative.status.status_name}</td>
 						<td
 							><button
+								class="change"
 								on:click={() => {
 									goto(`/relatives/${relative.abstract_profile.id}`);
 								}}>редактировать</button
@@ -54,6 +57,7 @@
 						>
 						<td
 							><button
+								class="delete"
 								on:click={() => {
 									// Делаем запрос на удаление
 									fetch(`http://localhost:8000/api/v1/relatives/${relative.id}/`, {
@@ -75,6 +79,9 @@
 </div>
 
 <style>
+	.submit {
+		text-align: center;
+	}
 	h1 {
 		font-size: 30px;
 		color: black;
@@ -85,34 +92,67 @@
 	}
 	table {
 		margin: 0 auto;
-		width: 50%;
+		width: 90%;
 		table-layout: fixed;
 	}
 	.tbl-header {
 		background-color: rgba(255, 255, 255, 0.3);
 	}
 	.tbl-content {
-		height: 300px;
+		height: 400px;
 		overflow-x: auto;
 		margin-top: 0px;
 		border: 1px solid rgba(255, 255, 255, 0.3);
 	}
 	th {
 		padding: 20px 15px;
-		text-align: left;
+		text-align: center;
 		font-weight: 500;
 		font-size: 14px;
 		color: black;
 		text-transform: uppercase;
 	}
+
+	button.change {
+		background-color: var(--primary-color);
+		color: white;
+		padding: 1px 2px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	button.delete {
+		background-color: red;
+		color: white;
+		padding: 1px 2px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
 	td {
 		padding: 15px;
-		text-align: left;
+		text-align: center;
 		vertical-align: middle;
 		font-weight: 300;
 		font-size: 12px;
 		color: black;
 		border-bottom: solid 1px rgba(255, 255, 255, 0.1);
+	}
+	input[type='button'] {
+		width: 20%;
+		background-color: #4caf50;
+		color: white;
+		padding: 14px 20px;
+		margin: 8px 0;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	input[type='button']:hover {
+		background-color: #45a049;
 	}
 
 	/* скролл бар */

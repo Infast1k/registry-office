@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { check_email, check_password } from '$lib/scripts/form-validate.js';
 	import axios from 'axios';
-	import { user } from '$lib/stores/userStore.js';
+	import { token, role } from '$lib/stores/userStore.js';
 
 	let email = '';
 	let password = '';
@@ -25,10 +25,9 @@
 					password: password
 				})
 				.then((response) => {
-					// Сохранение почты и токена в UserStore
-					$user.email = email;
-					$user.token = response.data.auth_token;
-					goto('/');
+					// Сохранение токена в UserStore
+					token.set(response.data.auth_token);
+					goto('/profile');
 					return;
 				})
 				.catch((errors) => {
@@ -135,7 +134,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: #4070f4;
+		background-color: var(--primary-color);
 	}
 
 	.container {
@@ -178,7 +177,7 @@
 		bottom: 0;
 		height: 3px;
 		width: 40px;
-		background-color: #4070f4;
+		background-color: var(--primary-color);
 		border-radius: 25px;
 	}
 
@@ -207,7 +206,7 @@
 	}
 
 	.input-field input:is(:focus, :valid) {
-		border-bottom-color: #4070f4;
+		border-bottom-color: var(--primary-color);
 	}
 
 	.input-field input.invalid {
@@ -225,7 +224,7 @@
 	}
 
 	.input-field input:is(:focus, :valid) ~ i {
-		color: #4070f4;
+		color: var(--primary-color);
 	}
 
 	.icon {
@@ -261,13 +260,13 @@
 		font-weight: 500;
 		letter-spacing: 1px;
 		border-radius: 6px;
-		background-color: #4070f4;
+		background-color: var(--primary-color);
 		cursor: pointer;
 		transition: all 0.3s ease;
 	}
 
 	.button input:hover {
-		background-color: #265df2;
+		background-color: var(--primary-color);
 	}
 
 	.form .login-signup {
