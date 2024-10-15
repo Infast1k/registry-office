@@ -7,7 +7,7 @@ from wedding.exceptions import SameSexException
 
 from wedding.serializers import WeddingSerializer
 from .serializers import ChildrenSerializer, WitnessSerializer
-from .models import Wedding, Witnesses, Children, Child, BirthSertificate, ChildStatus
+from .models import Wedding, WeddingStatus, Witnesses, Children, Child, BirthSertificate, ChildStatus
 from users.models import Profile, Passport, User
 from relationships.models import AbstractProfile
 
@@ -104,6 +104,19 @@ class WeddingDetailView(APIView):
             return Response(wedding_clear.data, status=status.HTTP_200_OK)
         except Wedding.DoesNotExist:
             return Response({"error": f"Договора с id {id} не существует!"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, id):
+        """Изменение статуса на На рассмотрении на развод"""
+        try:
+            wedding = Wedding.objects.get(id=id)
+            new_status = WeddingStatus.objects.get(id=5)
+            wedding.status = new_status
+            wedding.save()
+            return Response({"message": "Статус успешно изменен!"}, status=status.HTTP_200_OK)
+        except Wedding.DoesNotExist:
+            return Response({"error": f"Свадьба с id {id} не найдена"})
+        except WeddingStatus.DoesNotExist:
+            return Response({"error": f"Статус с id 5 не найден"})
 
 
 class WitnessesView(APIView):
@@ -232,6 +245,7 @@ class ChildrenView(APIView):
 
 class ChildDetail(APIView):
     def get(self, request, id):
+        """Получение ребенка по его id"""
         try:
             child = Children.objects.get(id=id)
             child_clear = ChildrenSerializer(child, many=False)

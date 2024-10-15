@@ -52,7 +52,7 @@
 </script>
 
 <div class="container">
-	<div>
+	<div class="form-container">
 		<form>
 			<label for="lname">Фамилия</label>
 			<input
@@ -98,15 +98,18 @@
 </div>
 
 <style>
-	.submit {
-		margin: 0;
-		padding: 0;
+	* {
+		background: var(--body-color);
+	}
+	.form-container {
+		width: 60%;
+		margin: 0 auto;
 		text-align: center;
 	}
 
 	input[type='text'],
-	input[type='tel'],
-	input[type='date'] {
+	input[type='date'],
+	input[type='tel'] {
 		width: 100%;
 		padding: 12px 20px;
 		margin: 8px 0;
@@ -117,7 +120,7 @@
 	}
 
 	input[type='button'] {
-		width: 20%;
+		width: 30%;
 		background-color: #4caf50;
 		color: white;
 		padding: 14px 20px;

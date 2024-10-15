@@ -3,16 +3,16 @@
 	import { token } from '$lib/stores/userStore.js';
 	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
+	import image from '$lib/images/default_image.jpg';
 
 	export let data;
 	let user = data.user;
-
 	let role = user.role.role_name;
 </script>
 
 <div class="container">
 	<div class="card-container">
-		<img class="round" src="https://randomuser.me/api/portraits/women/79.jpg" alt="user" />
+		<img class="round" src={image} width="150" alt="user" />
 		<h3>{user.profile.last_name} {user.profile.first_name} {user.profile.patronymic}</h3>
 		<h6>Телефон: {user.profile.phone}</h6>
 		<h6>Дата рождения: {user.profile.birth_date}</h6>
@@ -32,7 +32,7 @@
 						role: role
 					};
 					axios
-						.put('http://localhost:8000/api/v1/admin/users/4/', role_date, {
+						.put(`http://localhost:8000/api/v1/admin/users/${data.slug}/`, role_date, {
 							headers: {
 								Authorization: `Token ${get(token)}`
 							}
@@ -62,6 +62,10 @@
 </div>
 
 <style>
+	button {
+		cursor: pointer;
+	}
+
 	.buttons select {
 		margin-bottom: 7px;
 		padding: 3px 33px;
@@ -123,5 +127,16 @@
 		margin-top: 60px;
 		background-color: transparent;
 		color: #02899c;
+		cursor: pointer;
+	}
+	button.primary.ghost:hover {
+		background-color: #03bfcb;
+		border: 1px solid #03bfcb;
+		border-radius: 3px;
+		color: #231e39;
+		font-family: Montserrat, sans-serif;
+		font-weight: 500;
+		padding: 10px 25px;
+		cursor: pointer;
 	}
 </style>

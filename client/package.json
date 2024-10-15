@@ -26,6 +26,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"axios": "^1.5.1"
+		"axios": "^1.5.1",
+		"flowbite-svelte": "^0.44.20",
+		"svelte-local-storage-store": "^0.6.4"
 	}
 }

@@ -21,7 +21,6 @@
 		equals_passwords = equals_password(password1, password2);
 
 		if (valid_email && valid_password && equals_passwords) {
-			console.log('Регистрация сработала');
 			axios
 				.post('http://localhost:8000/api/v1/auth/users/', {
 					email: email,
@@ -159,12 +158,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: #4070f4;
+		background-color: var(--primary-color);
 	}
 
 	.container {
 		position: relative;
-		max-width: 430px;
+		max-width: 700px;
+		width: 300px;
 		widows: 100%;
 		background: #fff;
 		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
@@ -202,7 +202,7 @@
 		bottom: 0;
 		height: 3px;
 		width: 40px;
-		background-color: #4070f4;
+		background-color: var(--primary-color);
 		border-radius: 25px;
 	}
 
@@ -231,7 +231,7 @@
 	}
 
 	.input-field input:is(:focus, :valid) {
-		border-bottom-color: #4070f4;
+		border-bottom-color: var(--primary-color);
 	}
 
 	.input-field input.invalid {
@@ -249,7 +249,7 @@
 	}
 
 	.input-field input:is(:focus, :valid) ~ i {
-		color: #4070f4;
+		color: var(--primary-color);
 	}
 
 	.icon {
@@ -266,7 +266,7 @@
 	}
 
 	.form a.text {
-		color: #4070f4;
+		color: var(--primary-color);
 		text-decoration: none;
 	}
 
@@ -285,7 +285,7 @@
 		font-weight: 500;
 		letter-spacing: 1px;
 		border-radius: 6px;
-		background-color: #4070f4;
+		background-color: var(--primary-color);
 		cursor: pointer;
 		transition: all 0.3s ease;
 	}

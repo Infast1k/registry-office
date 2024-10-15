@@ -59,7 +59,7 @@
 </script>
 
 <div class="container">
-	<div>
+	<div class="form-container">
 		<form>
 			<label for="lname">Фамилия</label>
 			<input
@@ -126,9 +126,12 @@
 </div>
 
 <style>
-	.submit {
-		margin: 0;
-		padding: 0;
+	* {
+		background: var(--body-color);
+	}
+	.form-container {
+		width: 60%;
+		margin: 0 auto;
 		text-align: center;
 	}
 
@@ -145,7 +148,7 @@
 	}
 
 	input[type='button'] {
-		width: 20%;
+		width: 30%;
 		background-color: #4caf50;
 		color: white;
 		padding: 14px 20px;
